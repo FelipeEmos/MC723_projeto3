@@ -1,21 +1,15 @@
 #include <stdio.h>
-#include <math.h>
-#include <stdlib.h>
-#include <time.h>
 
-#define WIDTH   900
-#define HEIGHT  900
+#ifndef __mips__
+#include <stdlib.h>
+#endif
+
+#include "fpu.h"
+
+#define WIDTH   400
+#define HEIGHT  400
 #define BYTE    unsigned char
 
-// ---------------------------------------------------------------------------//
-// Mathematics
-
-inline double uniform01() {
-  return ((double)rand()/(double)RAND_MAX);
-}
-
-const double overlog2 = 1.44269504088896;
-const double over2log2 = 0.721347520444482;
 
 // ---------------------------------------------------------------------------//
 // COLOR STRUCTURE
@@ -32,10 +26,10 @@ const Color Red = {255, 0, 0};
 
 Color interpolate_linear(Color *c1, Color *c2, double alpha) {
   Color c;
-  double beta = 1.0 - alpha;
-  c.r = c1->r*beta + c2->r*alpha;
-  c.g = c1->g*beta + c2->g*alpha;
-  c.b = c1->b*beta + c2->b*alpha;
+  double beta = d_sub(1.0,alpha);
+  c.r = (BYTE)d_add(d_mult((double)c1->r,beta), d_mult((double)c2->r,alpha));
+  c.g = (BYTE)d_add(d_mult((double)c1->g,beta), d_mult((double)c2->g,alpha));
+  c.b = (BYTE)d_add(d_mult((double)c1->b,beta), d_mult((double)c2->b,alpha));
   return c;
 }
 
@@ -62,7 +56,7 @@ Color average(ColorAccumulator *acc, int n) {
 // ---------------------------------------------------------------------------//
 // BUFFER
 
-Color _buffer[HEIGHT][WIDTH] = {0};
+Color _buffer[HEIGHT][WIDTH];
 
 void setPixel(int x, int y, Color c) {
   _buffer[y][x] = c;
@@ -93,48 +87,9 @@ Color _pallete[16] = {
 };
 
 // ---------------------------------------------------------------------------//
-// COMPLEX
-
-typedef struct {
-    double r;
-    double i;
-} Complex;
-
-double c_mod(Complex z) {
-  return (z.r*z.r + z.i*z.i);
-}
-
-inline Complex c_scalar(Complex z, double s_r, double s_i) {
-  z.r *= s_r;
-  z.i *= s_i;
-  return z;
-}
-
-Complex c_mult(Complex z1, Complex z2) {
-  Complex z;
-  z.r = (z1.r * z2.r) - (z1.i * z2.i);
-  z.i = (z1.r * z2.i) + (z1.i * z2.r);
-  return z;
-}
-
-Complex c_add(Complex z1, Complex z2) {
-  Complex z;
-  z.r = z1.r + z2.r;
-  z.i = z1.i + z2.i;
-  return z;
-}
-
-Complex c_sub(Complex z1, Complex z2) {
-  Complex z;
-  z.r = z1.r - z2.r;
-  z.i = z1.i - z2.i;
-  return z;
-}
-
-// ---------------------------------------------------------------------------//
 // MANDELBROT
 
-const int max_it = 8000;
+int max_it = 2000;
 double scale = 1.0;
 
 Color mandelbrot(Complex c) {
@@ -151,49 +106,74 @@ Color mandelbrot(Complex c) {
   Color col = Black;
   int ind;
   if (it > 1 && it < max_it) {
-    double smooth_it = it + 1.0 - log(log(c_mod(z))*over2log2)*overlog2;
-    smooth_it *= scale;
-    ind = (int)floor(smooth_it);
-    double alpha = fmod(smooth_it, 1.0);
-    col = interpolate_linear(&_pallete[ind%pal], &_pallete[(ind+1)%pal], alpha);
+    double smooth_it = d_sub(d_add(it,1.0),d_mult(d_log(d_mult(d_log(c_mod(z)),over2log2)),overlog2));
+    smooth_it = d_mult(smooth_it,scale);
+    ind = d_floor(smooth_it);
+    col = interpolate_linear(&_pallete[ind%pal], &_pallete[(ind+1)%pal], d_frac(smooth_it));
   }
   return col;
 }
 
-
-// MANDELBROT
 // ---------------------------------------------------------------------------//
+// PRESETS
 
-int main(int argc, char *argv[]) {
-  // Check for parameters
-  if (argc < 3) {
-    printf("Usage %s imagefile samples_per_pixel\n", argv[0]);
+void loadpreset(Complex *center, Complex *window, int preset) {
+  switch (preset) {
+    case 1:
+      // Mandelbrot Center
+      center->r =  0.0;
+      center->i =  0.0;
+      window->r =  4.2;
+      window->i = -4.2;
+      scale = 1.0;
+      max_it = 2000;
+      break;
+    case 2:
+      // Mandelbrot Feature 1
+      center->r = -0.743643135;
+      center->i =  0.131825963;
+      window->r =  0.000014628;
+      window->i = -0.000014628;
+      scale = 0.03;
+      max_it = 2000;
+      break;
+    case 3:
+      // Mandelbrot Feature 2
+      center->r = -0.743643887037151;
+      center->i =  0.131825904205330;
+      window->r =  0.000000000051299;
+      window->i = -0.000000000051299;
+      scale = 0.02;
+      max_it = 8000;
+      break;
+  }
+}
+
+// ---------------------------------------------------------------------------//
+// MAIN
+
+int p_main(int argc, char *argv[]) {
+  // -------------------------------------------------------------------------//
+  // Reading Parameters
+  if (argc < 4) {
+    printf("Usage %s imagefile samples_per_pixel preset\n", argv[0]);
     return 1;
   }
   int samples;
   sscanf(argv[2], "%d", &samples);
-  srand((unsigned)time(NULL));
+  int preset;
+  sscanf(argv[3], "%d", &preset);
 
   // -------------------------------------------------------------------------//
   // Mandelbrot Setup
-
-  // Mandelbrot Center
-  //Complex center = {0.0, 0.0};
-  //Complex window = {4.2, -4.2};
-  //scale = 1.0;
-  // Mandelbrot Feature 1
-  //Complex center = {-0.743643135, 0.131825963};
-  //Complex window = {0.000014628, -0.000014628};
-  //scale = 0.03;
-  // Mandelbrot Feature 2
-  Complex center = {-0.743643887037151, 0.131825904205330};
-  Complex window = {0.000000000051299, -0.000000000051299};
-  scale = 0.02;
-
-  // -------------------------------------------------------------------------//
-  Complex window_base = c_sub(center, c_scalar(window, 0.5, 0.5));
-  Complex window_limit = c_add(center, c_scalar(window, 0.5, 0.5));
-  Complex pointer = c_scalar(c_sub(window_limit, window_base), 1.0/WIDTH, 1.0/HEIGHT);
+  Complex center;
+  Complex window;
+  loadpreset(&center, &window, preset);
+  Complex half = {0.5, 0.5};
+  Complex window_base = c_sub(center, c_scalar(window, half));
+  Complex window_limit = c_add(center, c_scalar(window, half));
+  Complex offset = {1.0/(double)WIDTH, 1.0/(double)HEIGHT};
+  Complex pointer = c_scalar(c_sub(window_limit, window_base), offset);
 
   // -------------------------------------------------------------------------//
   // For every pixel of the image
@@ -201,10 +181,10 @@ int main(int argc, char *argv[]) {
     if ( j % 100 == 0) { printf("%d ", j+100); fflush(stdout);}
     for (int i = 0; i < WIDTH; ++i) {
       ColorAccumulator acc = {0};
+      Complex base = {(double)i,(double)j};
       for (int s = 0; s < samples; ++s) {
-          double sample_i = i + uniform01();
-          double sample_j = j + uniform01();
-          Complex c = c_add(window_base, c_scalar(pointer, sample_i, sample_j));
+          Complex sample = c_add(base, c_uniform01());
+          Complex c = c_add(window_base, c_scalar(pointer, sample));
           accumulate(&acc, mandelbrot(c));
       }
       setPixel(i, j, average(&acc, samples));
@@ -225,8 +205,18 @@ int main(int argc, char *argv[]) {
 
   // -------------------------------------------------------------------------//
   // Open Image for Display
-  //char cmd[80];
-  //sprintf(cmd, "display %s", argv[1]);
-  //return system(cmd);
+#ifdef __mips__
   return 0;
+#else
+  char cmd[80];
+  sprintf(cmd, "display %s", argv[1]);
+  return system(cmd);
+#endif
+}
+
+
+// ---------------------------------------------------------------------------//
+// MAIN WRAPPER
+int main(int argc, char *argv[]) {
+  return p_main(argc, argv);
 }

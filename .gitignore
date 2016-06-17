@@ -1,1 +1,5 @@
 *.ppm
+*.o
+reference/mandel
+reference/mandel.mips
+reference/mandel_hard.mips
