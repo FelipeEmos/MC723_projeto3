@@ -39,6 +39,8 @@
 #include <stdlib.h>
 #include "ac_tlm_peripheral.h"
 #include <byteswap.h>
+#include <math.h>
+#include <time.h>
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -52,6 +54,7 @@ ac_tlm_peripheral::ac_tlm_peripheral( sc_module_name module_name , int k ) :
 {
     /// Binds target_export to the peripheral
     target_export( *this );
+    srand(STARTING_SEED);
 }
 
 /// Destructor
@@ -66,21 +69,21 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
+
   switch(a) {
-      case Z1_ADDR:
-        z1 = d;
+      case Z1_R_ADDR:
+        z1.r = d;
         break;
-    case Z2_ADDR:
-        z2 = d;
+    case Z1_I_ADDR:
+        z1.i = d;
         break;
-    case D1_ADDR:
-        d1 = d;
+    case Z2_R_ADDR:
+        z2.r = d;
         break;
-    case D2_ADDR:
-        d2 = d;
+    case Z2_I_ADDR:
+        z2.i = d;
         break;
   }
-
   return SUCCESS;
 }
 
@@ -92,6 +95,49 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 */
 ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 {
+  switch(a){
+	case ADD_R_ADDR:
+		 d = z1.r + z2.r;
+		 break;
+	case ADD_I_ADDR:
+		 d = z1.i + z2.i;
+		 break;
+	case SUB_R_ADDR:
+		  d = z1.r - z2.r;
+		  break;
+	case SUB_I_ADDR:
+		  d = z1.i - z2.i;
+		  break;
+	case MULT_R_ADDR:
+		  d = (z1.r*z2.r - z1.i*z2.i);
+		  break;
+	case MULT_I_ADDR:
+		  d = (z1.r*z2.i + z1.i*z2.r);
+		  break;
+	case MOD_ADDR:
+		  d = (z1.r*z1.r + z1.i*z1.i);
+		  break;
+	case SCALAR_R_ADDR:
+		  d = (z1.r*z2.r); 
+		  break;
+	case SCALAR_I_ADDR:
+		  d = (z1.i*z2.i);
+		  break;
+	case LOG_ADDR:
+		  d = log(z1.r);
+		  break;
+	case FRAC_ADDR:
+		  d = (z1.r - (int)z1.r);
+		  break;
+	case FLOOR_ADDR:
+		  d = (double)((int) z1.r);
+		  break;
+	case RANDOM_ADDR:
+		  d = ((double) rand() / (RAND_MAX)) + 1;
+		  break;
+
+
+  }
   d = 0;
   return SUCCESS;
 }
