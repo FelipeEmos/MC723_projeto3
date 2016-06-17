@@ -35,8 +35,22 @@ using user::ac_tlm_peripheral;
 int sc_main(int ac, char *av[])
 {
 
+  int nproc = atoi(av[1]);
+  printf("number of processors: %d\n", nproc);
+  
   //!  ISA simulator
   mips mips_proc1("mips");
+
+  mips *mips_proc2, *mips_proc3, *mips_proc4;
+  if(nproc > 1){
+    mips_proc2 = new mips("mips2");
+  }
+  if(nproc > 2){
+    mips_proc3 = new mips("mips3");
+    mips_proc4 = new mips("mips4");
+  }
+  
+  
   ac_tlm_mem mem("mem", 100*1024*1024);
   ac_tlm_router router("router");
   ac_tlm_peripheral peripheral("peripheral");
@@ -45,6 +59,15 @@ int sc_main(int ac, char *av[])
   router.PERIPHERAL_port(peripheral.target_export);
 
   mips_proc1.DM_port(router.target_export);
+
+  if(nproc > 1){
+    mips_proc2->DM_port(router.target_export);
+  }
+  if(nproc > 2){
+    mips_proc3->DM_port(router.target_export);
+    mips_proc4->DM_port(router.target_export);
+  }
+  
   
 
 #ifdef AC_DEBUG
@@ -53,14 +76,33 @@ int sc_main(int ac, char *av[])
 
   int ac1 = 4;
   char *av1[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
+  char *av2[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
+  char *av3[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
+  char *av4[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
 
   
   mips_proc1.init(ac1, av1);
+  if(nproc > 1){
+    mips_proc2->init(ac1, av2);
+  }
+  if(nproc > 2){
+    mips_proc3->init(ac1, av3);
+    mips_proc4->init(ac1, av4);
+  }
+  
   cerr << endl;
 
   sc_start();
 
   mips_proc1.PrintStat();
+  if(nproc > 1){
+    mips_proc2->PrintStat();
+  }
+  if(nproc > 2){
+    mips_proc3->PrintStat();
+    mips_proc4->PrintStat();
+  }
+  
   cerr << endl;
 
 #ifdef AC_STATS
