@@ -66,21 +66,21 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
+
   switch(a) {
-      case Z1_ADDR:
-        z1 = d;
+      case Z1_R_ADDR:
+        z1.r = d;
         break;
-    case Z2_ADDR:
-        z2 = d;
+    case Z1_I_ADDR:
+        z1.i = d;
         break;
-    case D1_ADDR:
-        d1 = d;
+    case Z2_R_ADDR:
+        z2.r = d;
         break;
-    case D2_ADDR:
-        d2 = d;
+    case Z2_I_ADDR:
+        z2.i = d;
         break;
   }
-
   return SUCCESS;
 }
 
