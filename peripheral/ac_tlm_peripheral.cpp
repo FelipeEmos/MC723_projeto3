@@ -42,6 +42,9 @@
 #include <math.h>
 #include <time.h>
 
+#include "ac_debug_model.H"
+#define DEBUG_MODEL
+
 //////////////////////////////////////////////////////////////////////////////
 
 /// Namespace to isolate peripheral from ArchC
@@ -69,19 +72,30 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
-
   switch(a) {
-      case Z1_R_ADDR:
-        z1.r = d;
+    case Z1_R_P1_ADDR:
+        *DOUBLE_PART1(&(z1.r)) = d;
         break;
-    case Z1_I_ADDR:
-        z1.i = d;
+    case Z1_R_P2_ADDR:
+        *DOUBLE_PART2(&(z1.r)) = d;
         break;
-    case Z2_R_ADDR:
-        z2.r = d;
+    case Z1_I_P1_ADDR:
+        *DOUBLE_PART1(&(z1.i)) = d;
         break;
-    case Z2_I_ADDR:
-        z2.i = d;
+    case Z1_I_P2_ADDR:
+        *DOUBLE_PART2(&(z1.i)) = d;
+        break;
+    case Z2_R_P1_ADDR:
+        *DOUBLE_PART1(&(z2.r)) = d;
+        break;
+    case Z2_R_P2_ADDR:
+        *DOUBLE_PART2(&(z2.r)) = d;
+        break;
+    case Z2_I_P1_ADDR:
+        *DOUBLE_PART1(&(z2.i)) = d;
+        break;
+    case Z2_I_P2_ADDR:
+        *DOUBLE_PART2(&(z2.i)) = d;
         break;
   }
   return SUCCESS;
@@ -95,10 +109,25 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 */
 ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 {
+  double aux;
   switch(a){
-	case ADD_R_ADDR:
-		 d = z1.r + z2.r;
+	case ADD_R_P1_ADDR:
+		 aux = z1.r + z2.r;
+		 d = *DOUBLE_PART1(&aux);
 		 break;
+	case ADD_R_P2_ADDR:
+		 aux = z1.r + z2.r;
+		 d = *DOUBLE_PART2(&aux);
+		 break;
+	case ADD_I_P1_ADDR:
+		 aux = z1.i + z2.i;
+		 d = *DOUBLE_PART1(&aux);
+		 break;
+	case ADD_I_P2_ADDR:
+		 aux = z1.i + z2.i;
+		 d = *DOUBLE_PART2(&aux);
+		 break;
+		 /*
 	case ADD_I_ADDR:
 		 d = z1.i + z2.i;
 		 break;
@@ -135,10 +164,8 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 	case RANDOM_ADDR:
 		  d = ((double) rand() / (RAND_MAX)) + 1;
 		  break;
-
-
+*/
   }
-  d = 0;
   return SUCCESS;
 }
 

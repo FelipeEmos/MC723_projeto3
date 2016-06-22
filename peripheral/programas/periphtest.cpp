@@ -1,7 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 #define MIPS_TOOLCHAIN
-#include "../peripheral_addrs.h"
+#include "../my_peripheral.h"
 
 typedef struct {
 	double r, i;
@@ -9,45 +10,76 @@ typedef struct {
 
 Complex getSoma(Complex z1, Complex z2);
 Complex getSub(Complex z1, Complex z2);
+void teste();
 
-volatile double *z1_r = (double*) Z1_R_ADDR;
-volatile double *z1_i = (double*) Z1_I_ADDR;
-volatile double *z2_r = (double*) Z2_R_ADDR;
-volatile double *z2_i = (double*) Z2_I_ADDR;
-volatile double *add_r = (double*) ADD_R_ADDR;
-volatile double *add_i = (double*) ADD_I_ADDR;
-volatile double *sub_r = (double*) SUB_R_ADDR;
-volatile double *sub_i = (double*) SUB_I_ADDR;
+volatile double *z1_r_p1 = (double*) Z1_R_P1_ADDR;
+volatile double *z1_r_p2 = (double*) Z1_R_P2_ADDR;
+volatile double *z1_i_p1 = (double*) Z1_I_P1_ADDR;
+volatile double *z1_i_p2 = (double*) Z1_I_P2_ADDR;
+volatile double *z2_r_p1 = (double*) Z2_R_P1_ADDR;
+volatile double *z2_r_p2 = (double*) Z2_R_P2_ADDR;
+volatile double *z2_i_p1 = (double*) Z2_I_P1_ADDR;
+volatile double *z2_i_p2 = (double*) Z1_I_P2_ADDR;
+volatile double *add_r_p1 = (double*) ADD_R_P1_ADDR;
+volatile double *add_r_p2 = (double*) ADD_R_P2_ADDR;
+volatile double *add_i_p1 = (double*) ADD_I_P1_ADDR;
+volatile double *add_i_p2 = (double*) ADD_I_P2_ADDR;
+volatile double *sub_r_p1 = (double*) SUB_R_P1_ADDR;
+volatile double *sub_r_p2 = (double*) SUB_R_P2_ADDR;
+volatile double *sub_i_p1 = (double*) SUB_I_P1_ADDR;
+volatile double *sub_i_p2 = (double*) SUB_I_P2_ADDR;
+volatile double *mod_p1 = (double*) MOD_P1_ADDR; 
+volatile double *mod_p2 = (double*) MOD_P2_ADDR;
 
+#define PERIPH_ON
 
 int main(){
+	//teste();
+	//return 0;
+	Complex z1, z2, soma;
 	
-	Complex z1, z2;
+	z1.r = z1.i = 1.0;
+	z2.r = z2.i = 2.0;
+	printf("TESTE\n");
 
-	z1.i = z1.r = 1; // 1 + 1j
-	z2.r = z2.i = 2; // 2 + 2j
+	soma = getSoma(z1,z2);
+	printf("TESTE\n");
 
-	Complex soma = getSoma(z1, z2);
-	//Complex sub = getSub(z1, z2);
+	printf("z1 = %lf+j%lf;\n",z1.r,z1.i);	
+	printf("z2 = %lf+j%lf;\n",z2.r,z2.i);
+	printf("TESTE\n");
 
-	printf("Da certo plz, nunca te pedi nada: %lf + j*%lf\n", soma.r, soma.i);
-
+	printf("Soma = %lf+j%lf;",soma.r,soma.i);
+	printf("TESTE\n");
+	
 	return 0;
 }
 
 
 Complex getSoma(Complex z1, Complex z2){
+#ifdef PERIPH_ON
 	Complex resposta;
+
+	*z1_r_p1 = *DOUBLE_PART1(&z1.r);
+	*z1_r_p2 = *DOUBLE_PART2(&z1.r);
+	*z1_i_p1 = *DOUBLE_PART1(&z1.i);
+	*z1_i_p2 = *DOUBLE_PART2(&z1.i);
+
+	*z2_r_p1 = *DOUBLE_PART1(&z2.r);
+	*z2_r_p2 = *DOUBLE_PART2(&z2.r);
+	*z2_i_p1 = *DOUBLE_PART1(&z2.i);
+	*z2_i_p2 = *DOUBLE_PART2(&z2.i);
 	
-	*z1_r = z1.r;
-	*z1_i = z1.i;
-	*z2_r = z2.r;
-	*z2_i = z2.i;
-	
-	resposta.r = *add_r;
-	resposta.i = *add_i;
+	UNITE_DOUBLE(*add_r_p1, *add_r_p2, &resposta.r);
+	UNITE_DOUBLE(*add_i_p1, *add_i_p2, &resposta.i);
 
 	return resposta;
+#else
+	Complex resposta;
+	resposta.r = z1.r + z2.r;
+	resposta.i = z1.i + z2.i;
+	return resposta;
+#endif
 }
 Complex getSub(Complex z1, Complex z2){
 	Complex resposta;
@@ -56,3 +88,17 @@ Complex getSub(Complex z1, Complex z2){
 	return resposta;
 }
 
+void teste(){
+	double d1, d2;
+        uint32_t int1, int2;
+	
+	d1 = 4.0;
+	
+	int1 = *DOUBLE_PART1(&d1);
+	int2 = *DOUBLE_PART2(&d1);
+
+	UNITE_DOUBLE(int1, int2, &d2);
+	
+	printf("[%p]double1:%lf\n[%p]int1: %x\n[%p]int2: %x\n[-------]double2:%lf\n",
+			&d1, d1, DOUBLE_PART1(&d1),int1, DOUBLE_PART2(&d1),int2,d2);
+}
