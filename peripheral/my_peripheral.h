@@ -4,6 +4,14 @@
 
 #define STARTING_SEED 0
 
+// Endian inversion
+// http://stackoverflow.com/questions/2182002/convert-big-endian-to-little-endian-in-c-without-using-provided-func
+#define INVERT_ENDIAN(num) \
+	(((num>>24)&0xff) \
+	|((num<<8)&0xff0000) \
+	|((num>>8)&0xff00) \
+	|((num<<24)&0xff000000))
+
 // 64bit breaking into 32bit
 // x -> double value to be broken
 #define DOUBLE_PART1(addr_double) \
@@ -16,6 +24,7 @@
 // int1 -> uint32_t value, part1 of double
 // int2 -> uint32_t value, part2 of double
 // addr_double -> address to be written in the double
+// DO NOT use the same variable in addr_double and int1, int2
 #define UNITE_DOUBLE(int1, int2, addr_double) \
 	*((uint32_t*)(addr_double)) = int1; \
 	*((uint32_t*)(addr_double) + 1) = int2
