@@ -19,7 +19,7 @@
 
 // x -> double value to be broken
 #define DOUBLE_PART2(addr_double) \
-	((uint32_t*)(addr_double)+1)
+	(((uint32_t*)(addr_double))+1)
 
 // int1 -> uint32_t value, part1 of double
 // int2 -> uint32_t value, part2 of double

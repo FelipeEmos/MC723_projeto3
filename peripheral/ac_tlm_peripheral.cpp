@@ -74,28 +74,28 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 {
   switch(a) {
     case Z1_R_P1_ADDR:
-        *DOUBLE_PART1(&(z1.r)) = INVERT_ENDIAN(d);
-        break;
-    case Z1_R_P2_ADDR:
         *DOUBLE_PART2(&(z1.r)) = INVERT_ENDIAN(d);
         break;
-    case Z1_I_P1_ADDR:
-        *DOUBLE_PART1(&(z1.i)) = INVERT_ENDIAN(d);
+    case Z1_R_P2_ADDR:
+        *DOUBLE_PART1(&(z1.r)) = INVERT_ENDIAN(d);
         break;
-    case Z1_I_P2_ADDR:
+    case Z1_I_P1_ADDR:
         *DOUBLE_PART2(&(z1.i)) = INVERT_ENDIAN(d);
         break;
+    case Z1_I_P2_ADDR:
+        *DOUBLE_PART1(&(z1.i)) = INVERT_ENDIAN(d);
+        break;
     case Z2_R_P1_ADDR:
-        *DOUBLE_PART1(&(z2.r)) = d;
+        *DOUBLE_PART2(&(z2.r)) = INVERT_ENDIAN(d);
         break;
     case Z2_R_P2_ADDR:
-        *DOUBLE_PART2(&(z2.r)) = d;
+        *DOUBLE_PART1(&(z2.r)) = INVERT_ENDIAN(d);
         break;
     case Z2_I_P1_ADDR:
-        *DOUBLE_PART1(&(z2.i)) = d;
+        *DOUBLE_PART2(&(z2.i)) = INVERT_ENDIAN(d);
         break;
     case Z2_I_P2_ADDR:
-        *DOUBLE_PART2(&(z2.i)) = d;
+        *DOUBLE_PART1(&(z2.i)) = INVERT_ENDIAN(d);
         break;
   }
   return SUCCESS;
@@ -112,71 +112,80 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 
   double aux;
   uint32_t aux_int;
-  uint32_t aux_int2;
-/*
-  aux = z1.r;
-  aux_int = *DOUBLE_PART1(&aux);
-  aux_int2 = *DOUBLE_PART2(&aux);
 
-  //aux_int = INVERT_ENDIAN(aux_int);
-  //aux_int2 = INVERT_ENDIAN(aux_int2);
-
-  UNITE_DOUBLE(aux_int, aux_int2 , &aux);
-
-  
-  cout << std::hex << "aux_int1:" << aux_int << "; aux_int2:" << aux_int2 << endl;
-  cout << "AUX: " << aux << endl;
-  cout << "Z1: " << z1.r << "+j" << z1.i << endl;
-  cout << "Z2: " << z2.r << "+j" << z2.i << endl;
-  */
   switch(a){
+//-----------------ADD------------------
 	case ADD_R_P1_ADDR:
 		 aux = z1.r + z2.r;
-		 d = *DOUBLE_PART1(&aux);
+		 
+		 aux_int = *DOUBLE_PART2(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+
 		 break;
 	case ADD_R_P2_ADDR:
 		 aux = z1.r + z2.r;
-		 d = *DOUBLE_PART2(&aux);
+		 
+		 aux_int = *DOUBLE_PART1(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		 
 		 break;
 	case ADD_I_P1_ADDR:
 		 aux = z1.i + z2.i;
-		 d = *DOUBLE_PART1(&aux);
+		 
+		 aux_int = *DOUBLE_PART2(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		 
 		 break;
 	case ADD_I_P2_ADDR:
 		 aux = z1.i + z2.i;
-		 d = *DOUBLE_PART2(&aux);
+		 
+		 aux_int = *DOUBLE_PART1(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		
 		 break;
-	default:
-		 d = -1;
+//-----------------SUB------------------
+	case SUB_R_P1_ADDR:
+		 aux = z1.r - z2.r;
+		 
+		 aux_int = *DOUBLE_PART2(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+
 		 break;
-		 /*
-	case ADD_I_ADDR:
-		 d = z1.i + z2.i;
+	case SUB_R_P2_ADDR:
+		 aux = z1.r - z2.r;
+		 
+		 aux_int = *DOUBLE_PART1(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		 
 		 break;
-	case SUB_R_ADDR:
-		  d = z1.r - z2.r;
-		  break;
-	case SUB_I_ADDR:
-		  d = z1.i - z2.i;
-		  break;
-	case MULT_R_ADDR:
-		  d = (z1.r*z2.r - z1.i*z2.i);
-		  break;
-	case MULT_I_ADDR:
-		  d = (z1.r*z2.i + z1.i*z2.r);
-		  break;
-		  */
+	case SUB_I_P1_ADDR:
+		 aux = z1.i - z2.i;
+		 
+		 aux_int = *DOUBLE_PART2(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		 
+		 break;
+	case SUB_I_P2_ADDR:
+		 aux = z1.i - z2.i;
+		 
+		 aux_int = *DOUBLE_PART1(&aux);
+		 d = INVERT_ENDIAN(aux_int);
+		
+		 break;
+//--------------------------------------
 	case MOD_P1_ADDR:
 		  aux = (z1.r*z1.r + z1.i*z1.i);
-		  aux = z1.r;
-		  aux_int = *DOUBLE_PART1(&aux);
+		  
+		  aux_int = *DOUBLE_PART2(&aux);
 		  d = INVERT_ENDIAN(aux_int);
+
 		  break;
 	case MOD_P2_ADDR:
 		  aux = (z1.r*z1.r + z1.i*z1.i);
-		  aux = z1.r;
-		  aux_int = *DOUBLE_PART2(&aux);
+		  
+		  aux_int = *DOUBLE_PART1(&aux);
 		  d = INVERT_ENDIAN(aux_int);
+
 		  break;
 		  /*
 	case SCALAR_R_ADDR:

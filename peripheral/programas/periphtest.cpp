@@ -5,6 +5,9 @@
 #define MIPS_TOOLCHAIN
 #include "../my_peripheral.h"
 
+#include <iostream>
+using namespace std;
+
 typedef struct {
 	double r, i;
 } Complex;
@@ -14,56 +17,42 @@ Complex getSub(Complex z1, Complex z2);
 void teste();
 //char const char *byte_to_binary(int x);
 
-volatile double *z1_r_p1 = (double*) Z1_R_P1_ADDR;
-volatile double *z1_r_p2 = (double*) Z1_R_P2_ADDR;
-volatile double *z1_i_p1 = (double*) Z1_I_P1_ADDR;
-volatile double *z1_i_p2 = (double*) Z1_I_P2_ADDR;
-volatile double *z2_r_p1 = (double*) Z2_R_P1_ADDR;
-volatile double *z2_r_p2 = (double*) Z2_R_P2_ADDR;
-volatile double *z2_i_p1 = (double*) Z2_I_P1_ADDR;
-volatile double *z2_i_p2 = (double*) Z1_I_P2_ADDR;
-volatile double *add_r_p1 = (double*) ADD_R_P1_ADDR;
-volatile double *add_r_p2 = (double*) ADD_R_P2_ADDR;
-volatile double *add_i_p1 = (double*) ADD_I_P1_ADDR;
-volatile double *add_i_p2 = (double*) ADD_I_P2_ADDR;
-volatile double *sub_r_p1 = (double*) SUB_R_P1_ADDR;
-volatile double *sub_r_p2 = (double*) SUB_R_P2_ADDR;
-volatile double *sub_i_p1 = (double*) SUB_I_P1_ADDR;
-volatile double *sub_i_p2 = (double*) SUB_I_P2_ADDR;
-volatile double *mod_p1 = (double*) MOD_P1_ADDR; 
-volatile double *mod_p2 = (double*) MOD_P2_ADDR;
+volatile uint32_t *z1_r_p1 = (uint32_t*) Z1_R_P1_ADDR;
+volatile uint32_t *z1_r_p2 = (uint32_t*) Z1_R_P2_ADDR;
+volatile uint32_t *z1_i_p1 = (uint32_t*) Z1_I_P1_ADDR;
+volatile uint32_t *z1_i_p2 = (uint32_t*) Z1_I_P2_ADDR;
+volatile uint32_t *z2_r_p1 = (uint32_t*) Z2_R_P1_ADDR;
+volatile uint32_t *z2_r_p2 = (uint32_t*) Z2_R_P2_ADDR;
+volatile uint32_t *z2_i_p1 = (uint32_t*) Z2_I_P1_ADDR;
+volatile uint32_t *z2_i_p2 = (uint32_t*) Z1_I_P2_ADDR;
+volatile uint32_t *add_r_p1 = (uint32_t*) ADD_R_P1_ADDR;
+volatile uint32_t *add_r_p2 = (uint32_t*) ADD_R_P2_ADDR;
+volatile uint32_t *add_i_p1 = (uint32_t*) ADD_I_P1_ADDR;
+volatile uint32_t *add_i_p2 = (uint32_t*) ADD_I_P2_ADDR;
+volatile uint32_t *sub_r_p1 = (uint32_t*) SUB_R_P1_ADDR;
+volatile uint32_t *sub_r_p2 = (uint32_t*) SUB_R_P2_ADDR;
+volatile uint32_t *sub_i_p1 = (uint32_t*) SUB_I_P1_ADDR;
+volatile uint32_t *sub_i_p2 = (uint32_t*) SUB_I_P2_ADDR;
+volatile uint32_t *mod_p1 = (uint32_t*) MOD_P1_ADDR; 
+volatile uint32_t *mod_p2 = (uint32_t*) MOD_P2_ADDR;
 
 
 #define PERIPH_ON
 
 int main(){
-	//teste();
-	//return 0;
-	Complex z1, z2, soma;
+	Complex z1, z2, soma, sub;
 	
-	z1.r = z1.i = 15.0;
-//	z2.r = z2.i = 40.0;
-	printf("TESTE\n");
+	z1.r = z1.i = 1.00000000000000000000000;
+	z2.r = z2.i = 2.00000000000000000000000;
 
-	*z1_r_p1 = *DOUBLE_PART1(&z1.r);
-	*z1_r_p2 = *DOUBLE_PART2(&z1.r);
-	*z1_i_p1 = *DOUBLE_PART1(&z1.i);
-	*z1_i_p2 = *DOUBLE_PART2(&z1.i);
+	soma = getSoma(z1, z2);
+	sub = getSub(z1, z2);
 
-	double module;
+	printf("Z1:  %lf+j*%lf\n",z1.r,z1.i);
+	printf("Z2:  %lf+j*%lf\n",z2.r,z2.i);
+	printf("SUM: %lf+j*%lf\n",soma.r,soma.i);
+	printf("SUB: %lf+j*%lf\n",sub.r,sub.i);
 
-	*DOUBLE_PART1(&module) = *mod_p1;//getSoma(z1,z2);
-	*DOUBLE_PART2(&module) = *mod_p2;//getSoma(z1,z2);
-	printf("TESTE\n");
-
-	printf("z1 = %lf+j%lf;\n",z1.r,z1.i);	
-//	printf("z2 = %lf+j%lf;\n",z2.r,z2.i);
-	printf("TESTE\n");
-	printf("Module: %lf\nM1:[%8x]; M2:[%8x]\n", 
-			module, *mod_p1, *mod_p2);
-//	printf("Soma = %lf+j%lf;",soma.r,soma.i);
-	printf("TESTE\n");
-	
 	return 0;
 }
 
@@ -94,10 +83,29 @@ Complex getSoma(Complex z1, Complex z2){
 #endif
 }
 Complex getSub(Complex z1, Complex z2){
+#ifdef PERIPH_ON
 	Complex resposta;
 
+	*z1_r_p1 = *DOUBLE_PART1(&z1.r);
+	*z1_r_p2 = *DOUBLE_PART2(&z1.r);
+	*z1_i_p1 = *DOUBLE_PART1(&z1.i);
+	*z1_i_p2 = *DOUBLE_PART2(&z1.i);
+
+	*z2_r_p1 = *DOUBLE_PART1(&z2.r);
+	*z2_r_p2 = *DOUBLE_PART2(&z2.r);
+	*z2_i_p1 = *DOUBLE_PART1(&z2.i);
+	*z2_i_p2 = *DOUBLE_PART2(&z2.i);
+	
+	UNITE_DOUBLE(*sub_r_p1, *sub_r_p2, &(resposta.r));
+	UNITE_DOUBLE(*sub_i_p1, *sub_i_p2, &(resposta.i));
 
 	return resposta;
+#else
+	Complex resposta;
+	resposta.r = z1.r - z2.r;
+	resposta.i = z1.i - z2.i;
+	return resposta;
+#endif
 }
 
 void teste(){
@@ -114,16 +122,3 @@ void teste(){
 	printf("[%p]double1:%lf\n[%p]int1: %x\n[%p]int2: %x\n[-------]double2:%lf\n",
 			&d1, d1, DOUBLE_PART1(&d1),int1, DOUBLE_PART2(&d1),int2,d2);
 }
-/*
-char const char *byte_to_binary(uint32_t x)
-{
-	static char b[9];
-	b[0] = '\0';
-
-	int z;
-	for (z = 128; z > 0; z >>= 1){
-		strcat(b, ((x & z) == z) ? "1" : "0");
-	}
-	return b;
-}
-*/
