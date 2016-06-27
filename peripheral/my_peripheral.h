@@ -29,19 +29,23 @@
 	*((uint32_t*)(addr_double)) = int1; \
 	*((uint32_t*)(addr_double) + 1) = int2
 	
-#define LOAD_Z1(z1) \
-	*((uint32_t*)(Z1_R_P1_ADDR)) = *DOUBLE_PART1(&z1.r); \
-	*((uint32_t*)(Z1_R_P2_ADDR)) = *DOUBLE_PART2(&z1.r); \
-	*((uint32_t*)(Z1_I_P1_ADDR)) = *DOUBLE_PART1(&z1.i); \
-	*((uint32_t*)(Z1_I_P2_ADDR)) = *DOUBLE_PART2(&z1.i) 
+#define LOAD_Z1(z1, tid) \
+	*((uint32_t*)(Z1_R_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z1.r); \
+	*((uint32_t*)(Z1_R_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z1.r); \
+	*((uint32_t*)(Z1_I_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z1.i); \
+	*((uint32_t*)(Z1_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z1.i) 
 	
-#define LOAD_Z2(z2) \
-	*((uint32_t*)(Z2_R_P1_ADDR)) = *DOUBLE_PART1(&z2.r); \
-	*((uint32_t*)(Z2_R_P2_ADDR)) = *DOUBLE_PART2(&z2.r); \
-	*((uint32_t*)(Z2_I_P1_ADDR)) = *DOUBLE_PART1(&z2.i); \
-	*((uint32_t*)(Z2_I_P2_ADDR)) = *DOUBLE_PART2(&z2.i) 
+#define LOAD_Z2(z2, tid) \
+	*((uint32_t*)(Z2_R_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z2.r); \
+	*((uint32_t*)(Z2_R_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z2.r); \
+	*((uint32_t*)(Z2_I_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z2.i); \
+	*((uint32_t*)(Z2_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z2.i) 
 	
 // -- Peripheral addresses --
+
+#define BASE_ADDR 0x6400000
+#define LIMIT_ADDR 0x7C
+
 // Writing addrs
 #define Z1_R_P1_ADDR 0x6400004 // complex 1 real part 1
 #define Z1_R_P2_ADDR 0x6400008 // complex 1 real part 2

@@ -25,37 +25,39 @@ Complex getRandom();
 void teste();
 //char const char *byte_to_binary(int x);
 
-volatile uint32_t *z1_r_p1 = (uint32_t*) Z1_R_P1_ADDR;
-volatile uint32_t *z1_r_p2 = (uint32_t*) Z1_R_P2_ADDR;
-volatile uint32_t *z1_i_p1 = (uint32_t*) Z1_I_P1_ADDR;
-volatile uint32_t *z1_i_p2 = (uint32_t*) Z1_I_P2_ADDR;
-volatile uint32_t *z2_r_p1 = (uint32_t*) Z2_R_P1_ADDR;
-volatile uint32_t *z2_r_p2 = (uint32_t*) Z2_R_P2_ADDR;
-volatile uint32_t *z2_i_p1 = (uint32_t*) Z2_I_P1_ADDR;
-volatile uint32_t *z2_i_p2 = (uint32_t*) Z1_I_P2_ADDR;
-volatile uint32_t *add_r_p1 = (uint32_t*) ADD_R_P1_ADDR;
-volatile uint32_t *add_r_p2 = (uint32_t*) ADD_R_P2_ADDR;
-volatile uint32_t *add_i_p1 = (uint32_t*) ADD_I_P1_ADDR;
-volatile uint32_t *add_i_p2 = (uint32_t*) ADD_I_P2_ADDR;
-volatile uint32_t *sub_r_p1 = (uint32_t*) SUB_R_P1_ADDR;
-volatile uint32_t *sub_r_p2 = (uint32_t*) SUB_R_P2_ADDR;
-volatile uint32_t *sub_i_p1 = (uint32_t*) SUB_I_P1_ADDR;
-volatile uint32_t *sub_i_p2 = (uint32_t*) SUB_I_P2_ADDR;
-volatile uint32_t *mod_p1 = (uint32_t*) MOD_P1_ADDR; 
-volatile uint32_t *mod_p2 = (uint32_t*) MOD_P2_ADDR;
-volatile uint32_t *scalar_r_p1 = (uint32_t*) SCALAR_R_P1_ADDR;
-volatile uint32_t *scalar_r_p2 = (uint32_t*) SCALAR_R_P2_ADDR;
-volatile uint32_t *scalar_i_p1 = (uint32_t*) SCALAR_I_P1_ADDR;
-volatile uint32_t *scalar_i_p2 = (uint32_t*) SCALAR_I_P2_ADDR;
-volatile uint32_t *log_p1 = (uint32_t*) LOG_P1_ADDR;
-volatile uint32_t *log_p2 = (uint32_t*) LOG_P2_ADDR;
-volatile uint32_t *frac_p1 = (uint32_t*) FRAC_P1_ADDR;
-volatile uint32_t *frac_p2 = (uint32_t*) FRAC_P2_ADDR;
-volatile uint32_t *floor_p1 = (uint32_t*) FLOOR_P1_ADDR;
-volatile uint32_t *floor_p2 = (uint32_t*) FLOOR_P2_ADDR;
-volatile uint32_t *random_p1 = (uint32_t*) RANDOM_P1_ADDR;
-volatile uint32_t *random_p2 = (uint32_t*) RANDOM_P2_ADDR;
+// thread id
+const uint32_t tid = 3;
 
+volatile uint32_t *z1_r_p1 = (uint32_t*) (Z1_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z1_r_p2 = (uint32_t*) (Z1_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z1_i_p1 = (uint32_t*) (Z1_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z1_i_p2 = (uint32_t*) (Z1_I_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z2_r_p1 = (uint32_t*) (Z2_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z2_r_p2 = (uint32_t*) (Z2_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z2_i_p1 = (uint32_t*) (Z2_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *z2_i_p2 = (uint32_t*) (Z1_I_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *add_r_p1 = (uint32_t*) (ADD_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *add_r_p2 = (uint32_t*) (ADD_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *add_i_p1 = (uint32_t*) (ADD_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *add_i_p2 = (uint32_t*) (ADD_I_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *sub_r_p1 = (uint32_t*) (SUB_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *sub_r_p2 = (uint32_t*) (SUB_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *sub_i_p1 = (uint32_t*) (SUB_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *sub_i_p2 = (uint32_t*) (SUB_I_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *mod_p1 = (uint32_t*) (MOD_P1_ADDR + tid*LIMIT_ADDR); 
+volatile uint32_t *mod_p2 = (uint32_t*) (MOD_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *scalar_r_p1 = (uint32_t*) (SCALAR_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *scalar_r_p2 = (uint32_t*) (SCALAR_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *scalar_i_p1 = (uint32_t*) (SCALAR_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *scalar_i_p2 = (uint32_t*) (SCALAR_I_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *log_p1 = (uint32_t*) (LOG_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *log_p2 = (uint32_t*) (LOG_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *frac_p1 = (uint32_t*) (FRAC_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *frac_p2 = (uint32_t*) (FRAC_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *floor_p1 = (uint32_t*) (FLOOR_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *floor_p2 = (uint32_t*) (FLOOR_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *random_p1 = (uint32_t*) (RANDOM_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *random_p2 = (uint32_t*) (RANDOM_P2_ADDR + tid*LIMIT_ADDR);
 
 #define PERIPH_ON
 
@@ -102,8 +104,8 @@ Complex getSoma(Complex z1, Complex z2){
 #ifdef PERIPH_ON
 	Complex z;
 
-	LOAD_Z1(z1);
-	LOAD_Z2(z2);
+	LOAD_Z1(z1, tid);
+	LOAD_Z2(z2, tid);
 	
 	UNITE_DOUBLE(*add_r_p1, *add_r_p2, &(z.r));
 	UNITE_DOUBLE(*add_i_p1, *add_i_p2, &(z.i));
@@ -121,8 +123,8 @@ Complex getSub(Complex z1, Complex z2){
 #ifdef PERIPH_ON
 	Complex z;
 
-	LOAD_Z1(z1);
-	LOAD_Z2(z2);
+	LOAD_Z1(z1, tid);
+	LOAD_Z2(z2, tid);
 	
 	UNITE_DOUBLE(*sub_r_p1, *sub_r_p2, &(z.r));
 	UNITE_DOUBLE(*sub_i_p1, *sub_i_p2, &(z.i));
@@ -140,7 +142,7 @@ double getMod(Complex z1){
 #ifdef PERIPH_ON
 	double z;
 	
-	LOAD_Z1(z1);
+	LOAD_Z1(z1, tid);
 	
 	UNITE_DOUBLE(*mod_p1, *mod_p2, &(z));
 	
@@ -156,8 +158,8 @@ Complex getScalar(Complex z1, Complex z2){
 #ifdef PERIPH_ON
 	Complex z;
 
-	LOAD_Z1(z1);
-	LOAD_Z2(z2);
+	LOAD_Z1(z1, tid);
+	LOAD_Z2(z2, tid);
 	
 	UNITE_DOUBLE(*scalar_r_p1, *scalar_r_p2, &(z.r));
 	UNITE_DOUBLE(*scalar_i_p1, *scalar_i_p2, &(z.i));
@@ -244,3 +246,4 @@ void teste(){
 	printf("[%p]double1:%lf\n[%p]int1: %x\n[%p]int2: %x\n[-------]double2:%lf\n",
 			&d1, d1, DOUBLE_PART1(&d1),int1, DOUBLE_PART2(&d1),int2,d2);
 }
+

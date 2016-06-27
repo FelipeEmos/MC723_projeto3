@@ -67,7 +67,7 @@ typedef struct {
         double i;
     } Complex;
 
-Complex z1, z2;    
+Complex z11, z12, z21, z22, z31, z32, z41, z42;  
 
 public:
   /// Exposed port with ArchC interface

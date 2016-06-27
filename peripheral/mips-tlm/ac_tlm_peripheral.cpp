@@ -45,6 +45,10 @@
 #include "ac_debug_model.H"
 #define DEBUG_MODEL
 
+
+// ********* UNCOMMENT if you want debug information *********/
+//#define DEBUG2
+
 //////////////////////////////////////////////////////////////////////////////
 
 /// Namespace to isolate peripheral from ArchC
@@ -72,30 +76,72 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
 */
 ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
 {
-  switch(a) {
+  volatile Complex *z1, *z2;   
+  
+  // get the offset
+  uint32_t offset = a - ((uint32_t) BASE_ADDR);
+  
+  // get the processor id through the offset
+  uint32_t a3 = ((uint32_t)offset/(LIMIT_ADDR+1));
+  
+  switch(a3) {
+	  case 0:
+		z1 = &z11;
+		z2 = &z12;
+		
+		break;
+	case 1:
+		z1 = &z21;
+		z2 = &z22;
+		
+		break;
+	case 2:
+		z1 = &z31;
+		z2 = &z32;
+		
+		break;
+	case 3:
+		z1 = &z41;
+		z2 = &z42;
+		
+		break; 
+	default:
+		break;
+  }
+  
+  uint32_t a4 = a - (a3*LIMIT_ADDR);
+  
+  #ifdef DEBUG2
+	  cout << "write a: " << hex << *((uint32_t *) &a) << endl;
+	  cout << "write offset: " << hex << *((uint32_t *) &offset) << endl;
+	  cout << "write a3: " << hex << *((uint32_t *) &a3) << endl;
+	  cout << "write a4: " << hex << *((uint32_t *) &a4) << endl << endl;
+  #endif
+  
+  switch(a4) {
     case Z1_R_P1_ADDR:
-        *DOUBLE_PART2(&(z1.r)) = bswap_32(d);
+        *DOUBLE_PART2(&((*z1).r)) = bswap_32(d);
         break;
     case Z1_R_P2_ADDR:
-        *DOUBLE_PART1(&(z1.r)) = bswap_32(d);
+        *DOUBLE_PART1(&((*z1).r)) = bswap_32(d);
         break;
     case Z1_I_P1_ADDR:
-        *DOUBLE_PART2(&(z1.i)) = bswap_32(d);
+        *DOUBLE_PART2(&((*z1).i)) = bswap_32(d);
         break;
     case Z1_I_P2_ADDR:
-        *DOUBLE_PART1(&(z1.i)) = bswap_32(d);
+        *DOUBLE_PART1(&((*z1).i)) = bswap_32(d);
         break;
     case Z2_R_P1_ADDR:
-        *DOUBLE_PART2(&(z2.r)) = bswap_32(d);
+        *DOUBLE_PART2(&((*z2).r)) = bswap_32(d);
         break;
     case Z2_R_P2_ADDR:
-        *DOUBLE_PART1(&(z2.r)) = bswap_32(d);
+        *DOUBLE_PART1(&((*z2).r)) = bswap_32(d);
         break;
     case Z2_I_P1_ADDR:
-        *DOUBLE_PART2(&(z2.i)) = bswap_32(d);
+        *DOUBLE_PART2(&((*z2).i)) = bswap_32(d);
         break;
     case Z2_I_P2_ADDR:
-        *DOUBLE_PART1(&(z2.i)) = bswap_32(d);
+        *DOUBLE_PART1(&((*z2).i)) = bswap_32(d);
         break;
   }
   return SUCCESS;
@@ -109,35 +155,74 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
 */
 ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 {
-
   double aux;
   uint32_t aux_int;
-
-  switch(a){
+  
+  volatile Complex *z1, *z2;   
+  
+  // get the offset
+  uint32_t offset = a - ((uint32_t) BASE_ADDR);
+  
+  // get the processor id through the offset
+  uint32_t a3 = ((uint32_t)offset/(LIMIT_ADDR+1));
+  
+  switch(a3) {
+	  case 0:
+		z1 = &z11;
+		z2 = &z12;
+		
+		break;
+	case 1:
+		z1 = &z21;
+		z2 = &z22;
+		
+		break;
+	case 2:
+		z1 = &z31;
+		z2 = &z32;
+		
+		break;
+	case 3:
+		z1 = &z41;
+		z2 = &z42;
+		
+		break;  
+  }
+  
+  uint32_t a4 = a - (a3*LIMIT_ADDR);
+  
+  #ifdef DEBUG2
+	  cout << "read a: " << hex << *((uint32_t *) &a) << endl;
+	  cout << "read offset: " << hex << *((uint32_t *) &offset) << endl;
+	  cout << "read a3: " << hex << *((uint32_t *) &a3) << endl;
+	  cout << "read a4: " << hex << *((uint32_t *) &a4) << endl << endl;
+  #endif
+  
+  switch(a4){
 //-----------------ADD------------------
 	case ADD_R_P1_ADDR:
-		 aux = z1.r + z2.r;
+		 aux = (*z1).r + (*z2).r;
 		 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
 	case ADD_R_P2_ADDR:
-		 aux = z1.r + z2.r;
+		 aux = (*z1).r + (*z2).r;
 		 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
 		 break;
 	case ADD_I_P1_ADDR:
-		 aux = z1.i + z2.i;
+		 aux = (*z1).i + (*z2).i;
 		 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
 		 break;
 	case ADD_I_P2_ADDR:
-		 aux = z1.i + z2.i;
+		 aux = (*z1).i + (*z2).i;
 		 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
@@ -145,28 +230,28 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		 break;
 //-----------------SUB------------------
 	case SUB_R_P1_ADDR:
-		 aux = z1.r - z2.r;
+		 aux = (*z1).r - (*z2).r;
 		 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
 	case SUB_R_P2_ADDR:
-		 aux = z1.r - z2.r;
+		 aux = (*z1).r - (*z2).r;
 		 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
 		 break;
 	case SUB_I_P1_ADDR:
-		 aux = z1.i - z2.i;
+		 aux = (*z1).i - (*z2).i;
 		 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
 		 break;
 	case SUB_I_P2_ADDR:
-		 aux = z1.i - z2.i;
+		 aux = (*z1).i - (*z2).i;
 		 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
@@ -174,14 +259,14 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		 break;
 //----------------MOD----------------------
 	case MOD_P1_ADDR:
-		  aux = (z1.r*z1.r + z1.i*z1.i);
+		  aux = ((*z1).r*(*z1).r + (*z1).i*(*z1).i);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  break;
 	case MOD_P2_ADDR:
-		  aux = (z1.r*z1.r + z1.i*z1.i);
+		  aux = ((*z1).r*(*z1).r + (*z1).i*(*z1).i);
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
@@ -189,28 +274,28 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		  break;
 //--------------SCALAR--------------------
 	case SCALAR_R_P1_ADDR:
-		  aux = (z1.r*z2.r); 
+		  aux = ((*z1).r*(*z2).r); 
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case SCALAR_R_P2_ADDR:
-		  aux = (z1.r*z2.r); 
+		  aux = ((*z1).r*(*z2).r); 
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;	  
 	case SCALAR_I_P1_ADDR:
-		  aux = (z1.i*z2.i);
+		  aux = ((*z1).i*(*z2).i);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case SCALAR_I_P2_ADDR:
-		  aux = (z1.i*z2.i);
+		  aux = ((*z1).i*(*z2).i);
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
@@ -218,14 +303,14 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		  break;
 //----------------LOG----------------------
 	case LOG_P1_ADDR:
-		  aux = log(z1.r);
+		  aux = log((*z1).r);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case LOG_P2_ADDR:
-		  aux = log(z1.r);
+		  aux = log((*z1).r);
 		 
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
@@ -233,17 +318,17 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		  break;
 //---------------FRAC----------------------
 	case FRAC_P1_ADDR:
-		  aux = (z1.r - (int)z1.r);
-		 // aux = fmod(z1.r, 1.0);
+		  aux = ((*z1).r - (int)(*z1).r);
+		 // aux = fmod((*z1).r, 1.0);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case FRAC_P2_ADDR:
-		  aux = (z1.r - (int)z1.r);
+		  aux = ((*z1).r - (int)(*z1).r);
 		  
-		 // aux = fmod(z1.r, 1.0);
+		 // aux = fmod((*z1).r, 1.0);
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
@@ -251,14 +336,14 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		  break;		  
 //----------------FLOOR----------------------
 	case FLOOR_P1_ADDR:
-		  aux = (double)((int) z1.r);
+		  aux = (double)((int) (*z1).r);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case FLOOR_P2_ADDR:
-		  aux = (double)((int) z1.r);
+		  aux = (double)((int) (*z1).r);
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
@@ -285,7 +370,7 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 }
 
 
-
+#undef DEBUG2
 
 
 
