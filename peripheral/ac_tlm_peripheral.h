@@ -29,7 +29,7 @@
  *
  */
 
-//////////////////////////////////////////////////////00////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 #ifndef AC_TLM_PERIPHERAL_H_
 #define AC_TLM_PERIPHERAL_H_
@@ -41,7 +41,7 @@
 #include <systemc>
 // ArchC includes
 #include "ac_tlm_protocol.H"
-#include "my_peripheral.h"
+#include "../my_peripheral.h"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -49,6 +49,8 @@
 using tlm::tlm_transport_if;
 
 //////////////////////////////////////////////////////////////////////////////
+
+//#define DEBUG
 
 /// Namespace to isolate memory from ArchC
 namespace user
@@ -60,15 +62,13 @@ class ac_tlm_peripheral:
   public ac_tlm_transport_if // Using ArchC TLM protocol
 {
 private:
-    typedef struct {
+typedef struct {
         double r;
         double i;
     } Complex;
 
-    Complex z1, z2;
-    
-    void do_op();
-    
+Complex z1, z2;    
+
 public:
   /// Exposed port with ArchC interface
   sc_export< ac_tlm_transport_if > target_export;
