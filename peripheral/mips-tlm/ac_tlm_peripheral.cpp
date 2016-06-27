@@ -233,16 +233,17 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		  break;
 //---------------FRAC----------------------
 	case FRAC_P1_ADDR:
-		  aux = fmod(z1.r, 1.0);
+		  aux = (z1.r - (int)z1.r);
+		 // aux = fmod(z1.r, 1.0);
 		  
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 		  
 		  break;
 	case FRAC_P2_ADDR:
-		  //aux = (z1.r - (int)z1.r);
+		  aux = (z1.r - (int)z1.r);
 		  
-		  aux = fmod(z1.r, 1.0);
+		 // aux = fmod(z1.r, 1.0);
 		  
 		  aux_int = *DOUBLE_PART1(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);

@@ -160,7 +160,7 @@ Complex getScalar(Complex z1, Complex z2){
 	LOAD_Z2(z2);
 	
 	UNITE_DOUBLE(*scalar_r_p1, *scalar_r_p2, &(z.r));
-	UNITE_DOUBLE(*scalar_i_p1, *scalar_i_p1, &(z.i));
+	UNITE_DOUBLE(*scalar_i_p1, *scalar_i_p2, &(z.i));
 
 	return z;
 #else
@@ -192,7 +192,7 @@ double getFrac(double d){
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
 	
-	UNITE_DOUBLE(*frac_p1, *frac_p1, &(d));
+	UNITE_DOUBLE(*frac_p1, *frac_p2, &(d));
 	
 	return d;
 #else
@@ -205,7 +205,7 @@ int getFloor(double d){
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
 	
-	UNITE_DOUBLE(*floor_p1, *floor_p1, &(d));
+	UNITE_DOUBLE(*floor_p1, *floor_p2, &(d));
 	
 	return (int)d;
 #else
