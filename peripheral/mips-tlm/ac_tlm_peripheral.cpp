@@ -342,6 +342,8 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
+		 
+		 cmult[procID]++;
 
 		 break;
 	case MULT_R_P2_ADDR:
@@ -350,6 +352,8 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
+		 cmult[procID]++;
+		 
 		 break;
 	case MULT_I_P1_ADDR:
 		 aux = (z1[procID].r*z2[procID].i) + (z1[procID].i*z2[procID].r);
@@ -357,18 +361,21 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 		 
+		 cmult[procID]++;
+		 
 		 break;
 	case MULT_I_P2_ADDR:
 		 aux = (z1[procID].r*z2[procID].i) + (z1[procID].i*z2[procID].r);
 		 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
+		 
+		 cmult[procID]++;
 		
 		 break;		  
   }
   
   return SUCCESS;
 }
-
 
 #undef DEBUG2

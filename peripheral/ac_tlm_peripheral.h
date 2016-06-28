@@ -52,9 +52,12 @@ using tlm::tlm_transport_if;
 
 //#define DEBUG
 
+#define NUM_PROCS 4
+
 /// Namespace to isolate memory from ArchC
 namespace user
 {
+    
 
 /// A TLM memory
 class ac_tlm_peripheral:
@@ -63,13 +66,25 @@ class ac_tlm_peripheral:
 {
 private:
 typedef struct {
-        double r;
-        double i;
-    } Complex;
+    double r;
+    double i;
+} Complex;
 
-Complex z11, z12, z21, z22, z31, z32, z41, z42;  
+Complex z1[NUM_PROCS], z2[NUM_PROCS];
+
+
+
+
 
 public:
+  // counters
+  uint32_t cscalar[NUM_PROCS];
+  uint32_t clog[NUM_PROCS];
+  uint32_t cmult[NUM_PROCS];
+  uint32_t cmod[NUM_PROCS];
+    
+  static uint32_t get_cmod(int i);
+
   /// Exposed port with ArchC interface
   sc_export< ac_tlm_transport_if > target_export;
 
@@ -131,7 +146,6 @@ public:
   ~ac_tlm_peripheral();
 
 };
-
 };
 
 #endif //AC_TLM_PERIPHERAL_H_
