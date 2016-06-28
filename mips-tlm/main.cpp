@@ -74,11 +74,11 @@ int sc_main(int ac, char *av[])
   ac_trace("mips_proc1.trace");
 #endif 
 
-  int ac1 = 4;
-  char *av1[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av2[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av3[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av4[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
+  int ac1 = 5;
+  char *av1[] = {"mips.x", "--load=../reference/mandel_hard.mips", "mandel.ppm", "1", "2"};
+  char *av2[] = {"mips.x", "--load=../reference/mandel_hard.mips", "mandel.ppm", "1", "2"};
+  char *av3[] = {"mips.x", "--load=../reference/mandel_hard.mips", "mandel.ppm", "1", "2"};
+  char *av4[] = {"mips.x", "--load=../reference/mandel_hard.mips", "mandel.ppm", "1", "2"};
 
   
   mips_proc1.init(ac1, av1);

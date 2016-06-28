@@ -104,4 +104,3 @@ sim_clean: clean model_clean
 
 distclean: sim_clean
 	rm -f main.cpp Makefile.archc
-

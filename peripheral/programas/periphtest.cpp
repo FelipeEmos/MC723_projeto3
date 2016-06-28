@@ -183,7 +183,6 @@ Complex getScalar(Complex z1, Complex z2){
 
 double getLog(double d){
 #ifdef PERIPH_ON
-
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
 	
@@ -197,7 +196,6 @@ double getLog(double d){
 
 double getFrac(double d){
 #ifdef PERIPH_ON
-	
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
 	
