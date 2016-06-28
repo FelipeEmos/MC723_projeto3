@@ -29,7 +29,7 @@
  *
  */
 
-//////////////////////////////////////////////////////00////////////////////////
+//////////////////////////////////////////////////////////////////////////////
 
 #ifndef AC_TLM_PERIPHERAL_H_
 #define AC_TLM_PERIPHERAL_H_
@@ -41,7 +41,7 @@
 #include <systemc>
 // ArchC includes
 #include "ac_tlm_protocol.H"
-#include "my_peripheral.h"
+#include "../my_peripheral.h"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -50,9 +50,14 @@ using tlm::tlm_transport_if;
 
 //////////////////////////////////////////////////////////////////////////////
 
+//#define DEBUG
+
+#define NUM_PROCS 4
+
 /// Namespace to isolate memory from ArchC
 namespace user
 {
+    
 
 /// A TLM memory
 class ac_tlm_peripheral:
@@ -60,16 +65,26 @@ class ac_tlm_peripheral:
   public ac_tlm_transport_if // Using ArchC TLM protocol
 {
 private:
-    typedef struct {
-        double r;
-        double i;
-    } Complex;
+typedef struct {
+    double r;
+    double i;
+} Complex;
 
-    Complex z1, z2;
-    
-    void do_op();
-    
+Complex z1[NUM_PROCS], z2[NUM_PROCS];
+
+
+
+
+
 public:
+  // counters
+  uint32_t cscalar[NUM_PROCS];
+  uint32_t clog[NUM_PROCS];
+  uint32_t cmult[NUM_PROCS];
+  uint32_t cmod[NUM_PROCS];
+    
+  static uint32_t get_cmod(int i);
+
   /// Exposed port with ArchC interface
   sc_export< ac_tlm_transport_if > target_export;
 
@@ -131,7 +146,6 @@ public:
   ~ac_tlm_peripheral();
 
 };
-
 };
 
 #endif //AC_TLM_PERIPHERAL_H_

@@ -24,7 +24,6 @@
 #include  "mips_isa_init.cpp"
 #include  "mips_bhv_macros.H"
 
-
 //If you want debug information for this model, uncomment next line
 //#define DEBUG_MODEL
 #include "ac_debug_model.H"
@@ -71,13 +70,15 @@ void ac_behavior(begin)
   lo = 0;
 
   RB[29] =  AC_RAM_END - 1024 - processors_started++ * DEFAULT_STACK_SIZE;
-
-
 }
 
 //!Behavior called after finishing simulation
 void ac_behavior(end)
 {
+    //using user::ac_tlm_peripheral;
+    //uint32_t x =  ac_tlm_peripheral::get_cmod(0);
+    
+  //cout << "CMOD[0]=" << x << endl;
   dbg_printf("@@@ end behavior @@@\n");
 }
 
