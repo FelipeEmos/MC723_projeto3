@@ -45,7 +45,7 @@ volatile uint32_t *sub_r_p1 = (uint32_t*) (SUB_R_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *sub_r_p2 = (uint32_t*) (SUB_R_P2_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *sub_i_p1 = (uint32_t*) (SUB_I_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *sub_i_p2 = (uint32_t*) (SUB_I_P2_ADDR + tid*LIMIT_ADDR);
-volatile uint32_t *mod_p1 = (uint32_t*) (MOD_P1_ADDR + tid*LIMIT_ADDR); 
+volatile uint32_t *mod_p1 = (uint32_t*) (MOD_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *mod_p2 = (uint32_t*) (MOD_P2_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *scalar_r_p1 = (uint32_t*) (SCALAR_R_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *scalar_r_p2 = (uint32_t*) (SCALAR_R_P2_ADDR + tid*LIMIT_ADDR);
@@ -70,13 +70,13 @@ int main(){
 	Complex z1, z2, soma, sub, z3,scalar, random, mult;
 	double mod,log2,frac;
 	int floor;
-	
+
 	z1.r = z1.i = 1.00000000000000000000000;
 	z2.r = z2.i = 2.00000000000000000000000;
-	
+
 	z3.r = 2.90000000000000000000000;
 	z3.i = -5.30000000000000000000000;
-	
+
 	double d = 10.28177711;
 
 	soma = getSoma(z1, z2);
@@ -103,7 +103,7 @@ int main(){
 	printf("Floor(%.10lf): %d\n",d,floor);
 	printf("RANDOM:  %.10lf+j*%.10lf\n",random.r,random.i);
 	printf("MULT:  %.10lf+j*%.10lf\n",mult.r,mult.i);
-	
+
 	return 0;
 }
 
@@ -113,7 +113,7 @@ Complex getSoma(Complex z1, Complex z2){
 
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	
+
 	UNITE_DOUBLE(*add_r_p1, *add_r_p2, &(z.r));
 	UNITE_DOUBLE(*add_i_p1, *add_i_p2, &(z.i));
 
@@ -132,7 +132,7 @@ Complex getSub(Complex z1, Complex z2){
 
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	
+
 	UNITE_DOUBLE(*sub_r_p1, *sub_r_p2, &(z.r));
 	UNITE_DOUBLE(*sub_i_p1, *sub_i_p2, &(z.i));
 
@@ -148,11 +148,11 @@ Complex getSub(Complex z1, Complex z2){
 double getMod(Complex z1){
 #ifdef PERIPH_ON
 	double z;
-	
+
 	LOAD_Z1(z1, tid);
-	
+
 	UNITE_DOUBLE(*mod_p1, *mod_p2, &(z));
-	
+
 	return z;
 #else
 	double z;
@@ -167,7 +167,7 @@ Complex getScalar(Complex z1, Complex z2){
 
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	
+
 	UNITE_DOUBLE(*scalar_r_p1, *scalar_r_p2, &(z.r));
 	UNITE_DOUBLE(*scalar_i_p1, *scalar_i_p2, &(z.i));
 
@@ -176,19 +176,18 @@ Complex getScalar(Complex z1, Complex z2){
 	Complex z;
 	z.r = z1.r*z2.r;
 	z.i = z1.i*z2.i;
-	
+
 	return z;
 #endif
 }
 
 double getLog(double d){
 #ifdef PERIPH_ON
-
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
-	
+
 	UNITE_DOUBLE(*log_p1, *log_p2, &(d));
-	
+
 	return d;
 #else
 	return log(d);
@@ -197,12 +196,11 @@ double getLog(double d){
 
 double getFrac(double d){
 #ifdef PERIPH_ON
-	
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
-	
+
 	UNITE_DOUBLE(*frac_p1, *frac_p2, &(d));
-	
+
 	return d;
 #else
 	return fmod(d, 1.0);
@@ -213,9 +211,9 @@ int getFloor(double d){
 #ifdef PERIPH_ON
 	*z1_r_p1 = *DOUBLE_PART1(&d);
 	*z1_r_p2 = *DOUBLE_PART2(&d);
-	
+
 	UNITE_DOUBLE(*floor_p1, *floor_p2, &(d));
-	
+
 	return (int)d;
 #else
 	return (int)floor(d);
@@ -225,10 +223,10 @@ int getFloor(double d){
 Complex getRandom(){
 #ifdef PERIPH_ON
 	Complex z;
-	
+
 	UNITE_DOUBLE(*random_p1, *random_p2, &(z.r));
 	UNITE_DOUBLE(*random_p1, *random_p2, &(z.i));
-	
+
 	return z;
 #else
 	Complex z;
@@ -244,7 +242,7 @@ Complex getMult(Complex z1, Complex z2) {
 
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	
+
 	UNITE_DOUBLE(*mult_r_p1, *mult_r_p2, &(z.r));
 	UNITE_DOUBLE(*mult_i_p1, *mult_i_p2, &(z.i));
 
@@ -255,21 +253,20 @@ Complex getMult(Complex z1, Complex z2) {
     z.i = (z1.r * z2.i) + (z1.i * z2.r);
 	return z;
 #endif
-	
+
 }
 
 void teste(){
 	double d1, d2;
         uint32_t int1, int2;
-	
+
 	d1 = 4.0;
-	
+
 	int1 = *DOUBLE_PART1(&d1);
 	int2 = *DOUBLE_PART2(&d1);
 
 	UNITE_DOUBLE(int1, int2, &d2);
-	
+
 	printf("[%p]double1:%lf\n[%p]int1: %x\n[%p]int2: %x\n[-------]double2:%lf\n",
 			&d1, d1, DOUBLE_PART1(&d1),int1, DOUBLE_PART2(&d1),int2,d2);
 }
-

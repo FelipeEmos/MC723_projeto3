@@ -1,5 +1,4 @@
-Makefile.archc
-main.cpp
+
 main.cpp.tmpl
 *.o
 mips.H

@@ -132,30 +132,30 @@ void loadpreset(Complex *center, Complex *window, int preset) {
   switch (preset) {
     case 1:
       // Mandelbrot Center
-      center->r = (Real)  0.0;
-      center->i = (Real)  0.0;
-      window->r = (Real)  4.2;
-      window->i = (Real) -4.2;
-      scale     = (Real)  1.0;
-      max_it    = (Real)  2000;
+      center->r =  0.0;
+      center->i =  0.0;
+      window->r =  4.2;
+      window->i = -4.2;
+      scale     =  1.0;
+      max_it    =  2000;
       break;
     case 2:
       // Mandelbrot Feature 1
-      center->r = (Real) -0.743643135;
-      center->i = (Real)  0.131825963;
-      window->r = (Real)  0.000014628;
-      window->i = (Real) -0.000014628;
-      scale     = (Real)  0.03;
-      max_it    = (Real)  2000;
+      center->r = -0.743643135;
+      center->i =  0.131825963;
+      window->r =  0.000014628;
+      window->i = -0.000014628;
+      scale     =  0.03;
+      max_it    =  2000;
       break;
     case 3:
       // Mandelbrot Feature 2
-      center->r = (Real) -0.743643887037151;
-      center->i = (Real)  0.131825904205330;
-      window->r = (Real)  0.000000000051299;
-      window->i = (Real) -0.000000000051299;
-      scale     = (Real)  0.02;
-      max_it    = (Real)  8000;
+      center->r = -0.743643887037151;
+      center->i =  0.131825904205330;
+      window->r =  0.000000000051299;
+      window->i = -0.000000000051299;
+      scale     =  0.02;
+      max_it    =  8000;
       break;
   }
 }
@@ -194,6 +194,7 @@ int p_main(int argc, char *argv[]) {
   int proc_num = getProc();
   start_job = (proc_num*HEIGHT)/proc_total;
   end_job = ((proc_num+1)*HEIGHT)/proc_total;
+  setupFPU(proc_num);
 #endif
 
   // -------------------------------------------------------------------------//

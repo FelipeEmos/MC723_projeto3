@@ -1,4 +1,4 @@
-//#define DEBUG
+#include <stdint.h>
 
 // TODO VER TAMANHO E DAR OS ENDERECOS
 
@@ -28,19 +28,19 @@
 #define UNITE_DOUBLE(int1, int2, addr_double) \
 	*((uint32_t*)(addr_double)) = int1; \
 	*((uint32_t*)(addr_double) + 1) = int2
-	
+
 #define LOAD_Z1(z1, tid) \
 	*((uint32_t*)(Z1_R_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z1.r); \
 	*((uint32_t*)(Z1_R_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z1.r); \
 	*((uint32_t*)(Z1_I_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z1.i); \
-	*((uint32_t*)(Z1_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z1.i) 
-	
+	*((uint32_t*)(Z1_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z1.i)
+
 #define LOAD_Z2(z2, tid) \
 	*((uint32_t*)(Z2_R_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z2.r); \
 	*((uint32_t*)(Z2_R_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z2.r); \
 	*((uint32_t*)(Z2_I_P1_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART1(&z2.i); \
-	*((uint32_t*)(Z2_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z2.i) 
-	
+	*((uint32_t*)(Z2_I_P2_ADDR+tid*LIMIT_ADDR)) = *DOUBLE_PART2(&z2.i)
+
 // -- Peripheral addresses --
 
 #define BASE_ADDR 0x6400000
@@ -51,7 +51,7 @@
 #define Z1_R_P2_ADDR 0x6400008 // complex 1 real part 2
 #define Z1_I_P1_ADDR 0x640000C // complex 1 imag part 1
 #define Z1_I_P2_ADDR 0x6400010 // complex 1 imag part 2
-#define Z2_R_P1_ADDR 0x6400014 // complex 2 real part 1 
+#define Z2_R_P1_ADDR 0x6400014 // complex 2 real part 1
 #define Z2_R_P2_ADDR 0x6400018 // complex 2 real part 2
 #define Z2_I_P1_ADDR 0x640001C // complex 2 imag part 1
 #define Z2_I_P2_ADDR 0x6400020 // complex 2 imag part 2

@@ -11,7 +11,7 @@
  * IC-UNICAMP                                         *
  * http://www.lsc.ic.unicamp.br                       *
  ******************************************************/
- 
+
 
 const char *project_name="mips";
 const char *project_file="mips.ac";
@@ -38,17 +38,17 @@ int sc_main(int ac, char *av[])
   mips mips_proc1("mips");
   ac_tlm_mem mem("mem", 100*1024*1024);
   ac_tlm_router router("router");
-  ac_tlm_peripheral peripheral("peripheral"); 
+  ac_tlm_peripheral peripheral("peripheral");
 
   router.MEM_port(mem.target_export);
-  router.PERIPHERAL_port(peripheral.target_export); 
+  router.PERIPHERAL_port(peripheral.target_export);
 
   mips_proc1.DM_port(router.target_export);
 
 
 #ifdef AC_DEBUG
   ac_trace("mips_proc1.trace");
-#endif 
+#endif
 
   mips_proc1.init(ac, av);
   cerr << endl;
@@ -57,16 +57,16 @@ int sc_main(int ac, char *av[])
 
   mips_proc1.PrintStat();
   cerr << endl;
-  
+
   cout<< "CMOD: " << peripheral.cmod[0] << endl;
 
 #ifdef AC_STATS
   ac_stats_base::print_all_stats(std::cerr);
-#endif 
+#endif
 
 #ifdef AC_DEBUG
   ac_close_trace();
-#endif 
+#endif
 
   return mips_proc1.ac_exit_status;
 }

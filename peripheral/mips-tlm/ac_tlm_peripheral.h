@@ -57,7 +57,7 @@ using tlm::tlm_transport_if;
 /// Namespace to isolate memory from ArchC
 namespace user
 {
-    
+
 
 /// A TLM memory
 class ac_tlm_peripheral:
@@ -82,7 +82,7 @@ public:
   uint32_t clog[NUM_PROCS];
   uint32_t cmult[NUM_PROCS];
   uint32_t cmod[NUM_PROCS];
-    
+
   static uint32_t get_cmod(int i);
 
   /// Exposed port with ArchC interface
