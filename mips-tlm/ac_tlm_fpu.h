@@ -72,18 +72,12 @@ typedef struct {
 
 Complex z1[NUM_PROCS], z2[NUM_PROCS];
 
-
-
-
-
 public:
   // counters
   uint32_t cscalar[NUM_PROCS];
   uint32_t clog[NUM_PROCS];
   uint32_t cmult[NUM_PROCS];
   uint32_t cmod[NUM_PROCS];
-
-  static uint32_t get_cmod(int i);
 
   /// Exposed port with ArchC interface
   sc_export< ac_tlm_transport_if > target_export;
@@ -94,7 +88,8 @@ public:
   ac_tlm_rsp_status writem( const uint32_t & , const uint32_t & );
   /// Internal read
   ac_tlm_rsp_status readm( const uint32_t & , uint32_t & );
-
+  
+  void print_counters(int nproc);
   void send_int();
 
   /**

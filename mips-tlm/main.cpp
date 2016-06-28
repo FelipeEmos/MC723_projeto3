@@ -104,10 +104,10 @@ int sc_main(int ac, char *av[])
   sprintf(strPreset, "%d", preset);
 
   
-  // char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  // char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  // char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  // char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  /*char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};*/
 
   char *av1[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av2[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
@@ -142,6 +142,8 @@ int sc_main(int ac, char *av[])
   }
   
   cerr << endl;
+  
+  fpu.print_counters(nproc);
 
 #ifdef AC_STATS
   ac_stats_base::print_all_stats(std::cerr);
