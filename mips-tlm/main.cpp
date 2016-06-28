@@ -35,8 +35,28 @@ using user::ac_tlm_peripheral;
 int sc_main(int ac, char *av[])
 {
 
-  int nproc = atoi(av[1]);
+  FILE *parameterFile;
+  printf("av[1] = %s\n", av[1]);
+  parameterFile = fopen(av[1], "r");
+  
+  int nproc;
+  fscanf(parameterFile, " %d", &nproc);
   printf("number of processors: %d\n", nproc);
+
+  
+  char outputFileName[30];
+  fscanf(parameterFile, " %s", outputFileName);
+  printf("outputFile: %s\n", outputFileName);
+  
+
+  int numberOfSamples;
+  fscanf(parameterFile, " %d", &numberOfSamples);
+  printf("number of samples: %d\n", numberOfSamples);
+  
+  int preset;
+  fscanf(parameterFile, " %d", &preset);
+  printf("preset: %d\n", preset);
+  
   
   //!  ISA simulator
   mips mips_proc1("mips");
@@ -59,7 +79,6 @@ int sc_main(int ac, char *av[])
   router.PERIPHERAL_port(peripheral.target_export);
 
   mips_proc1.DM_port(router.target_export);
-
   if(nproc > 1){
     mips_proc2->DM_port(router.target_export);
   }
@@ -74,16 +93,28 @@ int sc_main(int ac, char *av[])
   ac_trace("mips_proc1.trace");
 #endif 
 
-  int ac1 = 4;
-  char *av1[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av2[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av3[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
-  char *av4[] = {"mips.x", "--load=mandelbrot.mips", "mandel.ppm", "1"};
+  int ac1 = 6;
+  char strNProc[10];
+  sprintf(strNProc, "%d", nproc);
+
+  char strNumberOfSamples[10];
+  sprintf(strNumberOfSamples, "%d", numberOfSamples);
+  
+  char strPreset[10];
+  sprintf(strPreset, "%d", preset);
+
+  
+  //  char *av1[] = {"mips.x", "--load=mandel.mips", "mandel.ppm", "1", "1", strNProc};
+  char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+
 
   
   mips_proc1.init(ac1, av1);
   if(nproc > 1){
-    mips_proc2->init(ac1, av2);
+     mips_proc2->init(ac1, av2);
   }
   if(nproc > 2){
     mips_proc3->init(ac1, av3);
@@ -113,5 +144,8 @@ int sc_main(int ac, char *av[])
   ac_close_trace();
 #endif 
 
-  return mips_proc1.ac_exit_status;
+  int ret = mips_proc1.ac_exit_status;
+  ret += (nproc > 1) ? mips_proc2->ac_exit_status : 0;
+  ret += (nproc > 2) ? mips_proc3->ac_exit_status + mips_proc4->ac_exit_status : 0;
+  return ret;
 }

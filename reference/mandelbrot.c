@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 
-#define WIDTH   400
-#define HEIGHT  400
+#define WIDTH   20
+#define HEIGHT  20
 #define BYTE    unsigned char
 
 
