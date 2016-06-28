@@ -21,12 +21,13 @@ double getLog(double d);
 double getFrac(double d);
 int getFloor(double d);
 Complex getRandom();
+Complex getMult(Complex z1, Complex z2);
 
 void teste();
 //char const char *byte_to_binary(int x);
 
 // thread id
-const uint32_t tid = 3;
+const uint32_t tid = 0;
 
 volatile uint32_t *z1_r_p1 = (uint32_t*) (Z1_R_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *z1_r_p2 = (uint32_t*) (Z1_R_P2_ADDR + tid*LIMIT_ADDR);
@@ -58,11 +59,15 @@ volatile uint32_t *floor_p1 = (uint32_t*) (FLOOR_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *floor_p2 = (uint32_t*) (FLOOR_P2_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *random_p1 = (uint32_t*) (RANDOM_P1_ADDR + tid*LIMIT_ADDR);
 volatile uint32_t *random_p2 = (uint32_t*) (RANDOM_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *mult_r_p1 = (uint32_t*) (MULT_R_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *mult_r_p2 = (uint32_t*) (MULT_R_P2_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *mult_i_p1 = (uint32_t*) (MULT_I_P1_ADDR + tid*LIMIT_ADDR);
+volatile uint32_t *mult_i_p2 = (uint32_t*) (MULT_I_P2_ADDR + tid*LIMIT_ADDR);
 
 #define PERIPH_ON
 
 int main(){
-	Complex z1, z2, soma, sub, z3,scalar, random;
+	Complex z1, z2, soma, sub, z3,scalar, random, mult;
 	double mod,log2,frac;
 	int floor;
 	
@@ -82,6 +87,7 @@ int main(){
 	frac = getFrac(d);
 	floor = getFloor(d);
 	random = getRandom();
+	mult = getMult(z2,z3);
 
 	printf("Z1:  %.10lf+j*%.10lf\n",z1.r,z1.i);
 	printf("Z2:  %.10lf+j*%.10lf\n",z2.r,z2.i);
@@ -96,6 +102,7 @@ int main(){
 	printf("Frac(%.10lf): %.10lf\n",d,frac);
 	printf("Floor(%.10lf): %d\n",d,floor);
 	printf("RANDOM:  %.10lf+j*%.10lf\n",random.r,random.i);
+	printf("MULT:  %.10lf+j*%.10lf\n",mult.r,mult.i);
 	
 	return 0;
 }
@@ -231,6 +238,25 @@ Complex getRandom(){
 #endif
 }
 
+Complex getMult(Complex z1, Complex z2) {
+#ifdef PERIPH_ON
+	Complex z;
+
+	LOAD_Z1(z1, tid);
+	LOAD_Z2(z2, tid);
+	
+	UNITE_DOUBLE(*mult_r_p1, *mult_r_p2, &(z.r));
+	UNITE_DOUBLE(*mult_i_p1, *mult_i_p2, &(z.i));
+
+	return z;
+#else
+	Complex z;
+	z.r = (z1.r * z2.r) - (z1.i * z2.i);
+    z.i = (z1.r * z2.i) + (z1.i * z2.r);
+	return z;
+#endif
+	
+}
 
 void teste(){
 	double d1, d2;

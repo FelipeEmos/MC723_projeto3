@@ -44,7 +44,7 @@
 // -- Peripheral addresses --
 
 #define BASE_ADDR 0x6400000
-#define LIMIT_ADDR 0x7C
+#define LIMIT_ADDR 0x8C
 
 // Writing addrs
 #define Z1_R_P1_ADDR 0x6400004 // complex 1 real part 1
@@ -78,4 +78,9 @@
 #define FLOOR_P2_ADDR 0x6400074
 #define RANDOM_P1_ADDR 0x6400078 //random
 #define RANDOM_P2_ADDR 0x640007C
+#define MULT_R_P1_ADDR 0x6400080 // z.r = (z1.r * z2.r) - (z1.i * z2.i);
+#define MULT_R_P2_ADDR 0x6400084
+#define MULT_I_P1_ADDR 0x6400088 // z.i = (z1.r * z2.i) + (z1.i * z2.r);
+#define MULT_I_P2_ADDR 0x640008C
+
 //
