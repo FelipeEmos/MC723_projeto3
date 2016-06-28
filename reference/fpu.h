@@ -4,15 +4,24 @@
 // ---------------------------------------------------------------------------//
 // Floating Point Unit
 
-static const double overlog2 = 1.44269504088896;
-static const double over2log2 = 0.721347520444482;
+typedef float Real;
+
+static const Real r_zero      = (Real)0.0;
+static const Real r_one       = (Real)1.0;
+static const Real r_half      = (Real)0.5;
+static const Real r_overlog2  = (Real)1.44269504088896;
+static const Real r_over2log2 = (Real)0.721347520444482;
 
 typedef struct {
-    double r;
-    double i;
+    Real r;
+    Real i;
 } Complex;
 
-double c_mod(Complex z);
+static const Complex c_zero   = {(Real)0.0, (Real)0.0};
+static const Complex c_one    = {(Real)1.0, (Real)1.0};
+static const Complex c_half   = {(Real)0.5, (Real)0.5};
+
+Real c_mod(Complex z);
 
 Complex c_add(Complex z1, Complex z2);
 
@@ -24,16 +33,16 @@ Complex c_mult(Complex z1, Complex z2);
 
 Complex c_uniform01();
 
-double d_add(double d1, double d2);
+Real r_add(Real d1, Real d2);
 
-double d_sub(double d1, double d2);
+Real r_sub(Real d1, Real d2);
 
-double d_mult(double d1, double d2);
+Real r_mult(Real d1, Real d2);
 
-double d_log(double d);
+Real r_log(Real d);
 
-double d_frac(double d);
+Real r_frac(Real d);
 
-int d_floor(double d);
+int r_floor(Real d);
 
 #endif

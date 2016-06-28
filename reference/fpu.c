@@ -11,7 +11,7 @@
 // ---------------------------------------------------------------------------//
 // Complex Operations
 
-double c_mod(Complex z) {
+Real c_mod(Complex z) {
 #ifdef HARD
 #else
   return (z.r*z.r + z.i*z.i);
@@ -62,51 +62,51 @@ Complex c_uniform01() {
 #ifdef HARD
 #else
   Complex z;
-  z.r = ((double)rand()/(double)RAND_MAX);
-  z.i = ((double)rand()/(double)RAND_MAX);
+  z.r = ((Real)rand()/(Real)RAND_MAX);
+  z.i = ((Real)rand()/(Real)RAND_MAX);
   return z;
 #endif
 }
 
 // ---------------------------------------------------------------------------//
-// Double Operations
+// Real Operations
 
-double d_add(double d1, double d2) {
+Real r_add(Real d1, Real d2) {
 #ifdef HARD
 #else
   return d1 + d2;
 #endif
 }
 
-double d_sub(double d1, double d2) {
+Real r_sub(Real d1, Real d2) {
 #ifdef HARD
 #else
   return d1 - d2;
 #endif
 }
 
-double d_mult(double d1, double d2) {
+Real r_mult(Real d1, Real d2) {
 #ifdef HARD
 #else
   return d1 * d2;
 #endif
 }
 
-double d_log(double d) {
+Real r_log(Real d) {
 #ifdef HARD
 #else
   return log(d);
 #endif
 }
 
-double d_frac(double d) {
+Real r_frac(Real d) {
 #ifdef HARD
 #else
-  return fmod(d, 1.0);
+  return fmod(d, r_one);
 #endif
 }
 
-int d_floor(double d) {
+int r_floor(Real d) {
 #ifdef HARD
 #else
   return (int)floor(d);

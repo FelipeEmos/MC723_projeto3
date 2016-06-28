@@ -1,15 +1,26 @@
-#include <stdio.h>
+#include "fpu.h"
+#include "lock.h"
 
 #ifndef __mips__
 #include <stdlib.h>
 #endif
 
-#include "fpu.h"
+#include <stdio.h>
 
 #define WIDTH   400
 #define HEIGHT  400
 #define BYTE    unsigned char
 
+
+// ---------------------------------------------------------------------------//
+// DEBUG PRINT
+
+int Fail(const char format[], char arg[]) {
+#ifndef __mips__
+    fprintf(stderr, format, arg);
+#endif
+    return 1;
+}
 
 // ---------------------------------------------------------------------------//
 // COLOR STRUCTURE
@@ -24,12 +35,12 @@ const Color Black = {0};
 const Color White = {255, 255, 255};
 const Color Red = {255, 0, 0};
 
-Color interpolate_linear(Color *c1, Color *c2, double alpha) {
+Color interpolate_linear(Color *c1, Color *c2, Real alpha) {
   Color c;
-  double beta = d_sub(1.0,alpha);
-  c.r = (BYTE)d_add(d_mult((double)c1->r,beta), d_mult((double)c2->r,alpha));
-  c.g = (BYTE)d_add(d_mult((double)c1->g,beta), d_mult((double)c2->g,alpha));
-  c.b = (BYTE)d_add(d_mult((double)c1->b,beta), d_mult((double)c2->b,alpha));
+  Real beta = r_sub(r_one,alpha);
+  c.r = (BYTE)r_add(r_mult((Real)c1->r,beta), r_mult((Real)c2->r,alpha));
+  c.g = (BYTE)r_add(r_mult((Real)c1->g,beta), r_mult((Real)c2->g,alpha));
+  c.b = (BYTE)r_add(r_mult((Real)c1->b,beta), r_mult((Real)c2->b,alpha));
   return c;
 }
 
@@ -56,7 +67,7 @@ Color average(ColorAccumulator *acc, int n) {
 // ---------------------------------------------------------------------------//
 // BUFFER
 
-Color _buffer[HEIGHT][WIDTH];
+static Color _buffer[HEIGHT][WIDTH];
 
 void setPixel(int x, int y, Color c) {
   _buffer[y][x] = c;
@@ -89,13 +100,13 @@ Color _pallete[16] = {
 // ---------------------------------------------------------------------------//
 // MANDELBROT
 
-int max_it = 2000;
-double scale = 1.0;
+int max_it;
+Real scale;
 
 Color mandelbrot(Complex c) {
   // -------------------------------------------------------------------------//
   // Iterate Mandelbrot Set
-  Complex z = {0.0, 0.0};
+  Complex z = c_zero;
   int it = 0;
   while (c_mod(z) < (1 << 16) && it++ < max_it) {
     z = c_add(c_mult(z,z), c);
@@ -106,10 +117,10 @@ Color mandelbrot(Complex c) {
   Color col = Black;
   int ind;
   if (it > 1 && it < max_it) {
-    double smooth_it = d_sub(d_add(it,1.0),d_mult(d_log(d_mult(d_log(c_mod(z)),over2log2)),overlog2));
-    smooth_it = d_mult(smooth_it,scale);
-    ind = d_floor(smooth_it);
-    col = interpolate_linear(&_pallete[ind%pal], &_pallete[(ind+1)%pal], d_frac(smooth_it));
+    Real smooth_it = r_sub(r_add(it,1.0),r_mult(r_log(r_mult(r_log(c_mod(z)),r_over2log2)),r_overlog2));
+    smooth_it = r_mult(smooth_it,scale);
+    ind = r_floor(smooth_it);
+    col = interpolate_linear(&_pallete[ind%pal], &_pallete[(ind+1)%pal], r_frac(smooth_it));
   }
   return col;
 }
@@ -121,30 +132,30 @@ void loadpreset(Complex *center, Complex *window, int preset) {
   switch (preset) {
     case 1:
       // Mandelbrot Center
-      center->r =  0.0;
-      center->i =  0.0;
-      window->r =  4.2;
-      window->i = -4.2;
-      scale = 1.0;
-      max_it = 2000;
+      center->r = (Real)  0.0;
+      center->i = (Real)  0.0;
+      window->r = (Real)  4.2;
+      window->i = (Real) -4.2;
+      scale     = (Real)  1.0;
+      max_it    = (Real)  2000;
       break;
     case 2:
       // Mandelbrot Feature 1
-      center->r = -0.743643135;
-      center->i =  0.131825963;
-      window->r =  0.000014628;
-      window->i = -0.000014628;
-      scale = 0.03;
-      max_it = 2000;
+      center->r = (Real) -0.743643135;
+      center->i = (Real)  0.131825963;
+      window->r = (Real)  0.000014628;
+      window->i = (Real) -0.000014628;
+      scale     = (Real)  0.03;
+      max_it    = (Real)  2000;
       break;
     case 3:
       // Mandelbrot Feature 2
-      center->r = -0.743643887037151;
-      center->i =  0.131825904205330;
-      window->r =  0.000000000051299;
-      window->i = -0.000000000051299;
-      scale = 0.02;
-      max_it = 8000;
+      center->r = (Real) -0.743643887037151;
+      center->i = (Real)  0.131825904205330;
+      window->r = (Real)  0.000000000051299;
+      window->i = (Real) -0.000000000051299;
+      scale     = (Real)  0.02;
+      max_it    = (Real)  8000;
       break;
   }
 }
@@ -155,33 +166,43 @@ void loadpreset(Complex *center, Complex *window, int preset) {
 int p_main(int argc, char *argv[]) {
   // -------------------------------------------------------------------------//
   // Reading Parameters
-  if (argc < 4) {
-    printf("Usage %s imagefile samples_per_pixel preset\n", argv[0]);
-    return 1;
-  }
-  int samples;
+  if (argc < 5) return Fail("Usage %s image_file number_of_samples preset number_of_procs\n", argv[0]);
+
+  int proc_total = 1;
+  char filename[32];
+  int samples = 1;
+  int preset = 1;
+
+  sscanf(argv[1], "%s", filename);
   sscanf(argv[2], "%d", &samples);
-  int preset;
   sscanf(argv[3], "%d", &preset);
+  sscanf(argv[4], "%d", &proc_total);
 
   // -------------------------------------------------------------------------//
   // Mandelbrot Setup
   Complex center;
   Complex window;
   loadpreset(&center, &window, preset);
-  Complex half = {0.5, 0.5};
-  Complex window_base = c_sub(center, c_scalar(window, half));
-  Complex window_limit = c_add(center, c_scalar(window, half));
-  Complex offset = {1.0/(double)WIDTH, 1.0/(double)HEIGHT};
+  Complex window_base = c_sub(center, c_scalar(window, c_half));
+  Complex window_limit = c_add(center, c_scalar(window, c_half));
+  Complex offset = {r_one/(Real)WIDTH, r_one/(Real)HEIGHT};
   Complex pointer = c_scalar(c_sub(window_limit, window_base), offset);
+
+  int start_job = 0;
+  int end_job = HEIGHT;
+#ifdef __mips__
+  int proc_num = getProc();
+  start_job = (proc_num*HEIGHT)/proc_total;
+  end_job = ((proc_num+1)*HEIGHT)/proc_total;
+#endif
 
   // -------------------------------------------------------------------------//
   // For every pixel of the image
-  for (int j = 0; j < HEIGHT; ++j) {
-    if ( j % 100 == 0) { printf("%d ", j+100); fflush(stdout);}
+  for (int j = start_job; j < end_job; ++j) {
+    //if (j % 100 == 0) { printf("%d ", j+100); fflush(stdout);}
     for (int i = 0; i < WIDTH; ++i) {
       ColorAccumulator acc = {0};
-      Complex base = {(double)i,(double)j};
+      Complex base = {(Real)i,(Real)j};
       for (int s = 0; s < samples; ++s) {
           Complex sample = c_add(base, c_uniform01());
           Complex c = c_add(window_base, c_scalar(pointer, sample));
@@ -193,12 +214,12 @@ int p_main(int argc, char *argv[]) {
 
   // -------------------------------------------------------------------------//
   // Write Image to File
+#ifdef __mips__
+  if (Join(proc_num, proc_total)) return 0;
+#endif
   FILE *image;
   image = fopen(argv[1], "wb");
-  if (image == NULL) {
-    printf("Could not open file %s\n", argv[1]);
-    return 1;
-  }
+  if (image == NULL) return Fail("Could not open file %s\n", argv[1]);
   fprintf(image, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
   fwrite(_buffer, sizeof(BYTE), sizeof(_buffer), image);
   fclose(image);
