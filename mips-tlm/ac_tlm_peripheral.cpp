@@ -378,4 +378,13 @@ ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
   return SUCCESS;
 }
 
+void ac_tlm_peripheral::print_counters(int nProc) {
+	for(int i =0 ; i < nProc ; i++) {
+		cout << "Proc " << i << ": number of c_scalar instructions: " << cscalar[i] << endl;
+		cout << "Proc " << i << ": number of d_log instructions: " << clog[i] << endl;
+		cout << "Proc " << i << ": number of c_mult instructions: " << cmult[i] << endl;
+		cout << "Proc " << i << ": number of c_mod instructions: " << cmod[i] << endl;
+	}
+}
+
 #undef DEBUG2

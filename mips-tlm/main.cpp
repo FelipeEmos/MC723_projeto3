@@ -104,6 +104,13 @@ int sc_main(int ac, char *av[])
   }
   
   cerr << endl;
+  
+
+// TODO fazer algo que teste se eh o HARD
+//#ifdef HARD 
+  
+  peripheral.print_counters(1);
+//#endif
 
 #ifdef AC_STATS
   ac_stats_base::print_all_stats(std::cerr);
