@@ -37,7 +37,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "ac_tlm_peripheral.h"
+#include "ac_tlm_fpu.h"
 #include <byteswap.h>
 #include <math.h>
 #include <time.h>
@@ -52,10 +52,10 @@
 //////////////////////////////////////////////////////////////////////////////
 
 /// Namespace to isolate peripheral from ArchC
-using user::ac_tlm_peripheral;
+using user::ac_tlm_fpu;
 
 /// Constructor
-ac_tlm_peripheral::ac_tlm_peripheral( sc_module_name module_name , int k ) :
+ac_tlm_fpu::ac_tlm_fpu( sc_module_name module_name , int k ) :
 
   sc_module( module_name ),
   target_export("iport")
@@ -73,7 +73,7 @@ ac_tlm_peripheral::ac_tlm_peripheral( sc_module_name module_name , int k ) :
 }
 
 /// Destructor
-ac_tlm_peripheral::~ac_tlm_peripheral() {
+ac_tlm_fpu::~ac_tlm_fpu() {
 }
 
 /** Internal Write
@@ -82,7 +82,7 @@ ac_tlm_peripheral::~ac_tlm_peripheral() {
   * @param d is the data being write
   * @returns A TLM response packet with SUCCESS
 */
-ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t &d )
+ac_tlm_rsp_status ac_tlm_fpu::writem( const uint32_t &a , const uint32_t &d )
 {
   // get the offset
   uint32_t offset = a - ((uint32_t) BASE_ADDR);
@@ -134,7 +134,7 @@ ac_tlm_rsp_status ac_tlm_peripheral::writem( const uint32_t &a , const uint32_t 
   * @param d is the data that will be read
   * @returns A TLM response packet with SUCCESS and a modified d
 */
-ac_tlm_rsp_status ac_tlm_peripheral::readm( const uint32_t &a , uint32_t &d )
+ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 {
   double aux;
   uint32_t aux_int;

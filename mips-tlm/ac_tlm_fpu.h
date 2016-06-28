@@ -31,8 +31,8 @@
 
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef AC_TLM_PERIPHERAL_H_
-#define AC_TLM_PERIPHERAL_H_
+#ifndef AC_TLM_FPU_H_
+#define AC_TLM_FPU_H_
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -60,7 +60,7 @@ namespace user
 
 
 /// A TLM memory
-class ac_tlm_peripheral:
+class ac_tlm_fpu:
   public sc_module,
   public ac_tlm_transport_if // Using ArchC TLM protocol
 {
@@ -88,7 +88,7 @@ public:
   /// Exposed port with ArchC interface
   sc_export< ac_tlm_transport_if > target_export;
 
-  SC_HAS_PROCESS(ac_tlm_peripheral);
+  SC_HAS_PROCESS(ac_tlm_fpu);
 
   /// Internal write
   ac_tlm_rsp_status writem( const uint32_t & , const uint32_t & );
@@ -138,12 +138,12 @@ public:
    * @param k Memory size in kilowords.
    *
    */
-  ac_tlm_peripheral( sc_module_name module_name , int k = 1024 );
+  ac_tlm_fpu( sc_module_name module_name , int k = 1024 );
 
   /**
    * Default destructor.
    */
-  ~ac_tlm_peripheral();
+  ~ac_tlm_fpu();
 
 };
 };

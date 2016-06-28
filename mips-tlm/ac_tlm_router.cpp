@@ -15,7 +15,7 @@ ac_tlm_router::ac_tlm_router( sc_module_name module_name ) :
   sc_module( module_name ),
   target_export("iport"),
   MEM_port("MEM_port", 104857600U), //100 M
-  PERIPHERAL_port("PERIPHERAL_port",4U) // 4 B
+  FPU_port("FPU_port",4U) // 4 B (changed from 4U to 2048U)
 {
     /// Binds target_export to the memory
     target_export( *this );
@@ -27,7 +27,7 @@ ac_tlm_rsp ac_tlm_router::transport( const ac_tlm_req &request ) {
 	{
 		return MEM_port->transport(request);
 	}else{
-		return PERIPHERAL_port->transport(request);
+		return FPU_port->transport(request);
 	}
 
 }

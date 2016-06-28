@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------------------//
 // Lock Peripheral
 
-#define LOCK_ADDR			0x6400000
+#define LOCK_ADDR			0x7400000
 
 static volatile int *_lock = (int *)LOCK_ADDR;
 static volatile int _proccounter = 0;

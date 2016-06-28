@@ -26,11 +26,11 @@ const char *archc_options="-abi ";
 
 #include  "ac_tlm_mem.h"
 #include  "ac_tlm_router.h"
-#include  "ac_tlm_peripheral.h"
+#include  "ac_tlm_fpu.h"
 
 using user::ac_tlm_mem;
 using user::ac_tlm_router;
-using user::ac_tlm_peripheral;
+using user::ac_tlm_fpu;
 
 int sc_main(int ac, char *av[])
 {
@@ -73,10 +73,10 @@ int sc_main(int ac, char *av[])
   
   ac_tlm_mem mem("mem", 100*1024*1024);
   ac_tlm_router router("router");
-  ac_tlm_peripheral peripheral("peripheral");
+  ac_tlm_fpu fpu("fpu");
 
   router.MEM_port(mem.target_export);
-  router.PERIPHERAL_port(peripheral.target_export);
+  router.FPU_port(fpu.target_export);
 
   mips_proc1.DM_port(router.target_export);
   if(nproc > 1){
@@ -104,21 +104,28 @@ int sc_main(int ac, char *av[])
   sprintf(strPreset, "%d", preset);
 
   
-  //  char *av1[] = {"mips.x", "--load=mandel.mips", "mandel.ppm", "1", "1", strNProc};
-  char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  // char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  // char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  // char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  // char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
 
+  char *av1[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av2[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av3[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av4[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
 
   
   mips_proc1.init(ac1, av1);
+  mips_proc1.set_instr_batch_size(1);
   if(nproc > 1){
      mips_proc2->init(ac1, av2);
+     mips_proc2->set_instr_batch_size(1);
   }
   if(nproc > 2){
     mips_proc3->init(ac1, av3);
+    mips_proc3->set_instr_batch_size(1);
     mips_proc4->init(ac1, av4);
+    mips_proc4->set_instr_batch_size(1);
   }
   
   cerr << endl;
