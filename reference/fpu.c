@@ -6,7 +6,7 @@
 #endif
 
 #ifdef HARD
-#include "../peripheral/my_peripheral.h"
+#include "../peripheral/fpuAddress.h"
 #endif
 
 

@@ -41,7 +41,7 @@
 #include <systemc>
 // ArchC includes
 #include "ac_tlm_protocol.H"
-#include "../my_peripheral.h"
+#include "../peripheral/fpuAddress.h"
 
 //////////////////////////////////////////////////////////////////////////////
 
