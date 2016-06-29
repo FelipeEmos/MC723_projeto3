@@ -47,7 +47,7 @@
 
 
 // ********* UNCOMMENT if you want debug information *********/
-//#define DEBUG2
+#define DEBUG2
 
 //////////////////////////////////////////////////////////////////////////////
 
