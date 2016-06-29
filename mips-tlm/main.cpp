@@ -107,17 +107,18 @@ int sc_main(int ac, char *av[])
   char strPreset[10];
   sprintf(strPreset, "%d", preset);
 
-  
+
   char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
 
-  //char *av1[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  //char *av2[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  //char *av3[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  //char *av4[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-
+/*
+  char *av1[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av2[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av3[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  char *av4[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+*/
   
   mips_proc1.init(ac1, av1);
   mips_proc1.set_instr_batch_size(1);
