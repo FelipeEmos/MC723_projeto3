@@ -45,7 +45,6 @@
 #include "ac_debug_model.H"
 #define DEBUG_MODEL
 
-
 // ********* UNCOMMENT if you want debug information *********/
 #define DEBUG2
 
@@ -85,12 +84,12 @@ ac_tlm_fpu::~ac_tlm_fpu() {
 ac_tlm_rsp_status ac_tlm_fpu::writem( const uint32_t &a , const uint32_t &d )
 {
   // get the offset
-  uint32_t offset = a - ((uint32_t) BASE_ADDR);
+  uint32_t offset = a - ((uint32_t) BASE);
 
   // get the processor id through the offset
-  uint32_t procID = ((uint32_t)offset/(LIMIT_ADDR+1));
+  uint32_t procID = ((uint32_t)offset/(LIMIT+1));
 
-  uint32_t opAddr = a - (procID*LIMIT_ADDR);
+  uint32_t opAddr = a - (procID*LIMIT);
 
   #ifdef DEBUG2
 	  cout << "write a: " << hex << *((uint32_t *) &a) << endl;
@@ -100,28 +99,28 @@ ac_tlm_rsp_status ac_tlm_fpu::writem( const uint32_t &a , const uint32_t &d )
   #endif
 
   switch(opAddr) {
-    case Z1_R_P1_ADDR:
+    case Z1_R_P1:
         *DOUBLE_PART2(&(z1[procID].r)) = bswap_32(d);
         break;
-    case Z1_R_P2_ADDR:
+    case Z1_R_P2:
         *DOUBLE_PART1(&(z1[procID].r)) = bswap_32(d);
         break;
-    case Z1_I_P1_ADDR:
+    case Z1_I_P1:
         *DOUBLE_PART2(&(z1[procID].i)) = bswap_32(d);
         break;
-    case Z1_I_P2_ADDR:
+    case Z1_I_P2:
         *DOUBLE_PART1(&(z1[procID].i)) = bswap_32(d);
         break;
-    case Z2_R_P1_ADDR:
+    case Z2_R_P1:
         *DOUBLE_PART2(&(z2[procID].r)) = bswap_32(d);
         break;
-    case Z2_R_P2_ADDR:
+    case Z2_R_P2:
         *DOUBLE_PART1(&(z2[procID].r)) = bswap_32(d);
         break;
-    case Z2_I_P1_ADDR:
+    case Z2_I_P1:
         *DOUBLE_PART2(&(z2[procID].i)) = bswap_32(d);
         break;
-    case Z2_I_P2_ADDR:
+    case Z2_I_P2:
         *DOUBLE_PART1(&(z2[procID].i)) = bswap_32(d);
         break;
   }
@@ -140,12 +139,12 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
   uint32_t aux_int;
 
   // get the offset
-  uint32_t offset = a - ((uint32_t) BASE_ADDR);
+  uint32_t offset = a - ((uint32_t) BASE);
 
   // get the processor id through the offset
-  uint32_t procID = ((uint32_t)offset/(LIMIT_ADDR+1));
+  uint32_t procID = ((uint32_t)offset/(LIMIT+1));
 
-  uint32_t opAddr = a - (procID*LIMIT_ADDR);
+  uint32_t opAddr = a - (procID*LIMIT);
 
   #ifdef DEBUG2
 	  cout << "read a: " << hex << *((uint32_t *) &a) << endl;
@@ -156,28 +155,28 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
   switch(opAddr){
 //-----------------ADD------------------
-	case ADD_R_P1_ADDR:
+	case ADD_R_P1:
 		 aux = z1[procID].r + z2[procID].r;
 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case ADD_R_P2_ADDR:
+	case ADD_R_P2:
 		 aux = z1[procID].r + z2[procID].r;
 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case ADD_I_P1_ADDR:
+	case ADD_I_P1:
 		 aux = z1[procID].i + z2[procID].i;
 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case ADD_I_P2_ADDR:
+	case ADD_I_P2:
 		 aux = z1[procID].i + z2[procID].i;
 
 		 aux_int = *DOUBLE_PART1(&aux);
@@ -185,28 +184,28 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		 break;
 //-----------------SUB------------------
-	case SUB_R_P1_ADDR:
+	case SUB_R_P1:
 		 aux = z1[procID].r - z2[procID].r;
 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case SUB_R_P2_ADDR:
+	case SUB_R_P2:
 		 aux = z1[procID].r - z2[procID].r;
 
 		 aux_int = *DOUBLE_PART1(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case SUB_I_P1_ADDR:
+	case SUB_I_P1:
 		 aux = z1[procID].i - z2[procID].i;
 
 		 aux_int = *DOUBLE_PART2(&aux);
 		 *((uint32_t *) &d) = bswap_32(aux_int);
 
 		 break;
-	case SUB_I_P2_ADDR:
+	case SUB_I_P2:
 		 aux = z1[procID].i - z2[procID].i;
 
 		 aux_int = *DOUBLE_PART1(&aux);
@@ -214,7 +213,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		 break;
 //----------------MOD----------------------
-	case MOD_P1_ADDR:
+	case MOD_P1:
 		  aux = (z1[procID].r*z1[procID].r + z1[procID].i*z1[procID].i);
 
 		  aux_int = *DOUBLE_PART2(&aux);
@@ -223,7 +222,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  cmod[procID]++;
 
 		  break;
-	case MOD_P2_ADDR:
+	case MOD_P2:
 		  aux = (z1[procID].r*z1[procID].r + z1[procID].i*z1[procID].i);
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -233,7 +232,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //--------------SCALAR--------------------
-	case SCALAR_R_P1_ADDR:
+	case SCAL_R_P1:
 		  aux = (z1[procID].r*z2[procID].r);
 
 		  aux_int = *DOUBLE_PART2(&aux);
@@ -242,7 +241,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  cscalar[procID]++;
 
 		  break;
-	case SCALAR_R_P2_ADDR:
+	case SCAL_R_P2:
 		  aux = (z1[procID].r*z2[procID].r);
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -251,7 +250,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  cscalar[procID]++;
 
 		  break;
-	case SCALAR_I_P1_ADDR:
+	case SCAL_I_P1:
 		  aux = (z1[procID].i*z2[procID].i);
 
 		  aux_int = *DOUBLE_PART2(&aux);
@@ -260,7 +259,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  cscalar[procID]++;
 
 		  break;
-	case SCALAR_I_P2_ADDR:
+	case SCAL_I_P2:
 		  aux = (z1[procID].i*z2[procID].i);
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -270,7 +269,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //----------------LOG----------------------
-	case LOG_P1_ADDR:
+	case LOG_P1:
 		  aux = log(z1[procID].r);
 
 		  aux_int = *DOUBLE_PART2(&aux);
@@ -279,7 +278,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  clog[procID]++;
 
 		  break;
-	case LOG_P2_ADDR:
+	case LOG_P2:
 		  aux = log(z1[procID].r);
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -289,7 +288,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //---------------FRAC----------------------
-	case FRAC_P1_ADDR:
+	case FRAC_P1:
 		  aux = (z1[procID].r - (int)z1[procID].r);
 		 // aux = fmod(z1[procID].r, 1.0);
 
@@ -297,7 +296,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  break;
-	case FRAC_P2_ADDR:
+	case FRAC_P2:
 		  aux = (z1[procID].r - (int)z1[procID].r);
 
 		 // aux = fmod(z1[procID].r, 1.0);
@@ -307,14 +306,14 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //----------------FLOOR----------------------
-	case FLOOR_P1_ADDR:
+	case FLOOR_P1:
 		  aux = (double)((int) z1[procID].r);
 
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  break;
-	case FLOOR_P2_ADDR:
+	case FLOOR_P2:
 		  aux = (double)((int) z1[procID].r);
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -322,14 +321,14 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //----------------RANDOM----------------------
-	case RANDOM_P1_ADDR:
+	case RANDOM_P1:
 		  aux = ((double) rand() / (RAND_MAX)) + 1;
 
 		  aux_int = *DOUBLE_PART2(&aux);
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  break;
-	case RANDOM_P2_ADDR:
+	case RANDOM_P2:
 		  aux = ((double) rand() / (RAND_MAX)) + 1;
 
 		  aux_int = *DOUBLE_PART1(&aux);
@@ -337,7 +336,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 
 		  break;
 //-----------------MULT------------------
-	case MULT_R_P1_ADDR:
+	case MULT_R_P1:
 		 aux = (z1[procID].r*z2[procID].r) - (z1[procID].i*z2[procID].i);
 
 		 aux_int = *DOUBLE_PART2(&aux);
@@ -346,7 +345,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		 cmult[procID]++;
 
 		 break;
-	case MULT_R_P2_ADDR:
+	case MULT_R_P2:
 		 aux = (z1[procID].r*z2[procID].r) - (z1[procID].i*z2[procID].i);
 
 		 aux_int = *DOUBLE_PART1(&aux);
@@ -355,7 +354,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		 cmult[procID]++;
 
 		 break;
-	case MULT_I_P1_ADDR:
+	case MULT_I_P1:
 		 aux = (z1[procID].r*z2[procID].i) + (z1[procID].i*z2[procID].r);
 
 		 aux_int = *DOUBLE_PART2(&aux);
@@ -364,7 +363,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		 cmult[procID]++;
 
 		 break;
-	case MULT_I_P2_ADDR:
+	case MULT_I_P2:
 		 aux = (z1[procID].r*z2[procID].i) + (z1[procID].i*z2[procID].r);
 
 		 aux_int = *DOUBLE_PART1(&aux);

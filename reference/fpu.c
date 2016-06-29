@@ -18,40 +18,41 @@
 
 #ifdef HARD
 int tid;
-volatile uint32_t *z1_r_p1;
-volatile uint32_t *z1_r_p2;
-volatile uint32_t *z1_i_p1;
-volatile uint32_t *z1_i_p2;
-volatile uint32_t *z2_r_p1;
-volatile uint32_t *z2_r_p2;
-volatile uint32_t *z2_i_p1;
-volatile uint32_t *z2_i_p2;
-volatile uint32_t *add_r_p1;
-volatile uint32_t *add_r_p2;
-volatile uint32_t *add_i_p1;
-volatile uint32_t *add_i_p2;
-volatile uint32_t *sub_r_p1;
-volatile uint32_t *sub_r_p2;
-volatile uint32_t *sub_i_p1;
-volatile uint32_t *sub_i_p2;
-volatile uint32_t *mod_p1;
-volatile uint32_t *mod_p2;
-volatile uint32_t *scalar_r_p1;
-volatile uint32_t *scalar_r_p2;
-volatile uint32_t *scalar_i_p1;
-volatile uint32_t *scalar_i_p2;
-volatile uint32_t *log_p1;
-volatile uint32_t *log_p2;
-volatile uint32_t *frac_p1;
-volatile uint32_t *frac_p2;
-volatile uint32_t *floor_p1;
-volatile uint32_t *floor_p2;
-volatile uint32_t *random_p1;
-volatile uint32_t *random_p2;
-volatile uint32_t *mult_r_p1;
-volatile uint32_t *mult_r_p2;
-volatile uint32_t *mult_i_p1;
-volatile uint32_t *mult_i_p2;
+typedef (uint32_t*) u32;
+volatile u32 z1_r_p1[4]  ={(u32)(Z1_R_P1  ),(u32)(Z1_R_P1  +1*LIMIT),(u32)(Z1_R_P1  +2*LIMIT),(u32)(Z1_R_P1  +3*LIMIT)};
+volatile u32 z1_r_p2[4]  ={(u32)(Z1_R_P2  ),(u32)(Z1_R_P2  +1*LIMIT),(u32)(Z1_R_P2  +2*LIMIT),(u32)(Z1_R_P2  +3*LIMIT)};
+volatile u32 z1_i_p1[4]  ={(u32)(Z1_I_P1  ),(u32)(Z1_I_P1  +1*LIMIT),(u32)(Z1_I_P1  +2*LIMIT),(u32)(Z1_I_P1  +3*LIMIT)};
+volatile u32 z1_i_p2[4]  ={(u32)(Z1_I_P2  ),(u32)(Z1_I_P2  +1*LIMIT),(u32)(Z1_I_P2  +2*LIMIT),(u32)(Z1_I_P2  +3*LIMIT)};
+volatile u32 z2_r_p1[4]  ={(u32)(Z2_R_P1  ),(u32)(Z2_R_P1  +1*LIMIT),(u32)(Z2_R_P1  +2*LIMIT),(u32)(Z2_R_P1  +3*LIMIT)};
+volatile u32 z2_r_p2[4]  ={(u32)(Z2_R_P2  ),(u32)(Z2_R_P2  +1*LIMIT),(u32)(Z2_R_P2  +2*LIMIT),(u32)(Z2_R_P2  +3*LIMIT)};
+volatile u32 z2_i_p1[4]  ={(u32)(Z2_I_P1  ),(u32)(Z2_I_P1  +1*LIMIT),(u32)(Z2_I_P1  +2*LIMIT),(u32)(Z2_I_P1  +3*LIMIT)};
+volatile u32 z2_i_p2[4]  ={(u32)(Z1_I_P2  ),(u32)(Z1_I_P2  +1*LIMIT),(u32)(Z1_I_P2  +2*LIMIT),(u32)(Z1_I_P2  +3*LIMIT)};
+volatile u32 add_r_p1[4] ={(u32)(ADD_R_P1 ),(u32)(ADD_R_P1 +1*LIMIT),(u32)(ADD_R_P1 +2*LIMIT),(u32)(ADD_R_P1 +3*LIMIT)};
+volatile u32 add_r_p2[4] ={(u32)(ADD_R_P2 ),(u32)(ADD_R_P2 +1*LIMIT),(u32)(ADD_R_P2 +2*LIMIT),(u32)(ADD_R_P2 +3*LIMIT)};
+volatile u32 add_i_p1[4] ={(u32)(ADD_I_P1 ),(u32)(ADD_I_P1 +1*LIMIT),(u32)(ADD_I_P1 +2*LIMIT),(u32)(ADD_I_P1 +3*LIMIT)};
+volatile u32 add_i_p2[4] ={(u32)(ADD_I_P2 ),(u32)(ADD_I_P2 +1*LIMIT),(u32)(ADD_I_P2 +2*LIMIT),(u32)(ADD_I_P2 +3*LIMIT)};
+volatile u32 sub_r_p1[4] ={(u32)(SUB_R_P1 ),(u32)(SUB_R_P1 +1*LIMIT),(u32)(SUB_R_P1 +2*LIMIT),(u32)(SUB_R_P1 +3*LIMIT)};
+volatile u32 sub_r_p2[4] ={(u32)(SUB_R_P2 ),(u32)(SUB_R_P2 +1*LIMIT),(u32)(SUB_R_P2 +2*LIMIT),(u32)(SUB_R_P2 +3*LIMIT)};
+volatile u32 sub_i_p1[4] ={(u32)(SUB_I_P1 ),(u32)(SUB_I_P1 +1*LIMIT),(u32)(SUB_I_P1 +2*LIMIT),(u32)(SUB_I_P1 +3*LIMIT)};
+volatile u32 sub_i_p2[4] ={(u32)(SUB_I_P2 ),(u32)(SUB_I_P2 +1*LIMIT),(u32)(SUB_I_P2 +2*LIMIT),(u32)(SUB_I_P2 +3*LIMIT)};
+volatile u32 mod_p1[4]   ={(u32)(MOD_P1   ),(u32)(MOD_P1   +1*LIMIT),(u32)(MOD_P1   +2*LIMIT),(u32)(MOD_P1   +3*LIMIT)};
+volatile u32 mod_p2[4]   ={(u32)(MOD_P2   ),(u32)(MOD_P2   +1*LIMIT),(u32)(MOD_P2   +2*LIMIT),(u32)(MOD_P2   +3*LIMIT)};
+volatile u32 scal_r_p1[4]={(u32)(SCAL_R_P1),(u32)(SCAL_R_P1+1*LIMIT),(u32)(SCAL_R_P1+2*LIMIT),(u32)(SCAL_R_P1+3*LIMIT)};
+volatile u32 scal_r_p2[4]={(u32)(SCAL_R_P2),(u32)(SCAL_R_P2+1*LIMIT),(u32)(SCAL_R_P2+2*LIMIT),(u32)(SCAL_R_P2+3*LIMIT)};
+volatile u32 scal_i_p1[4]={(u32)(SCAL_I_P1),(u32)(SCAL_I_P1+1*LIMIT),(u32)(SCAL_I_P1+2*LIMIT),(u32)(SCAL_I_P1+3*LIMIT)};
+volatile u32 scal_i_p2[4]={(u32)(SCAL_I_P2),(u32)(SCAL_I_P2+1*LIMIT),(u32)(SCAL_I_P2+2*LIMIT),(u32)(SCAL_I_P2+3*LIMIT)};
+volatile u32 log_p1[4]   ={(u32)(LOG_P1   ),(u32)(LOG_P1   +1*LIMIT),(u32)(LOG_P1   +2*LIMIT),(u32)(LOG_P1   +3*LIMIT)};
+volatile u32 log_p2[4]   ={(u32)(LOG_P2   ),(u32)(LOG_P2   +1*LIMIT),(u32)(LOG_P2   +2*LIMIT),(u32)(LOG_P2   +3*LIMIT)};
+volatile u32 frac_p1[4]  ={(u32)(FRAC_P1  ),(u32)(FRAC_P1  +1*LIMIT),(u32)(FRAC_P1  +2*LIMIT),(u32)(FRAC_P1  +3*LIMIT)};
+volatile u32 frac_p2[4]  ={(u32)(FRAC_P2  ),(u32)(FRAC_P2  +1*LIMIT),(u32)(FRAC_P2  +2*LIMIT),(u32)(FRAC_P2  +3*LIMIT)};
+volatile u32 floor_p1[4] ={(u32)(FLOOR_P1 ),(u32)(FLOOR_P1 +1*LIMIT),(u32)(FLOOR_P1 +2*LIMIT),(u32)(FLOOR_P1 +3*LIMIT)};
+volatile u32 floor_p2[4] ={(u32)(FLOOR_P2 ),(u32)(FLOOR_P2 +1*LIMIT),(u32)(FLOOR_P2 +2*LIMIT),(u32)(FLOOR_P2 +3*LIMIT)};
+volatile u32 random_p1[4]={(u32)(RANDOM_P1),(u32)(RANDOM_P1+1*LIMIT),(u32)(RANDOM_P1+2*LIMIT),(u32)(RANDOM_P1+3*LIMIT)};
+volatile u32 random_p2[4]={(u32)(RANDOM_P2),(u32)(RANDOM_P2+1*LIMIT),(u32)(RANDOM_P2+2*LIMIT),(u32)(RANDOM_P2+3*LIMIT)};
+volatile u32 mult_r_p1[4]={(u32)(MULT_R_P1),(u32)(MULT_R_P1+1*LIMIT),(u32)(MULT_R_P1+2*LIMIT),(u32)(MULT_R_P1+3*LIMIT)};
+volatile u32 mult_r_p2[4]={(u32)(MULT_R_P2),(u32)(MULT_R_P2+1*LIMIT),(u32)(MULT_R_P2+2*LIMIT),(u32)(MULT_R_P2+3*LIMIT)};
+volatile u32 mult_i_p1[4]={(u32)(MULT_I_P1),(u32)(MULT_I_P1+1*LIMIT),(u32)(MULT_I_P1+2*LIMIT),(u32)(MULT_I_P1+3*LIMIT)};
+volatile u32 mult_i_p2[4]={(u32)(MULT_I_P2),(u32)(MULT_I_P2+1*LIMIT),(u32)(MULT_I_P2+2*LIMIT),(u32)(MULT_I_P2+3*LIMIT)};
 #endif
 
 // ---------------------------------------------------------------------------//
@@ -60,40 +61,6 @@ volatile uint32_t *mult_i_p2;
 void setupFPU(int proc_num) {
 #ifdef HARD
   tid = proc_num;
-  z1_r_p1     = (uint32_t*) (Z1_R_P1_ADDR     + proc_num*LIMIT_ADDR);
-  z1_r_p2     = (uint32_t*) (Z1_R_P2_ADDR     + proc_num*LIMIT_ADDR);
-  z1_i_p1     = (uint32_t*) (Z1_I_P1_ADDR     + proc_num*LIMIT_ADDR);
-  z1_i_p2     = (uint32_t*) (Z1_I_P2_ADDR     + proc_num*LIMIT_ADDR);
-  z2_r_p1     = (uint32_t*) (Z2_R_P1_ADDR     + proc_num*LIMIT_ADDR);
-  z2_r_p2     = (uint32_t*) (Z2_R_P2_ADDR     + proc_num*LIMIT_ADDR);
-  z2_i_p1     = (uint32_t*) (Z2_I_P1_ADDR     + proc_num*LIMIT_ADDR);
-  z2_i_p2     = (uint32_t*) (Z1_I_P2_ADDR     + proc_num*LIMIT_ADDR);
-  add_r_p1    = (uint32_t*) (ADD_R_P1_ADDR    + proc_num*LIMIT_ADDR);
-  add_r_p2    = (uint32_t*) (ADD_R_P2_ADDR    + proc_num*LIMIT_ADDR);
-  add_i_p1    = (uint32_t*) (ADD_I_P1_ADDR    + proc_num*LIMIT_ADDR);
-  add_i_p2    = (uint32_t*) (ADD_I_P2_ADDR    + proc_num*LIMIT_ADDR);
-  sub_r_p1    = (uint32_t*) (SUB_R_P1_ADDR    + proc_num*LIMIT_ADDR);
-  sub_r_p2    = (uint32_t*) (SUB_R_P2_ADDR    + proc_num*LIMIT_ADDR);
-  sub_i_p1    = (uint32_t*) (SUB_I_P1_ADDR    + proc_num*LIMIT_ADDR);
-  sub_i_p2    = (uint32_t*) (SUB_I_P2_ADDR    + proc_num*LIMIT_ADDR);
-  mod_p1      = (uint32_t*) (MOD_P1_ADDR      + proc_num*LIMIT_ADDR);
-  mod_p2      = (uint32_t*) (MOD_P2_ADDR      + proc_num*LIMIT_ADDR);
-  scalar_r_p1 = (uint32_t*) (SCALAR_R_P1_ADDR + proc_num*LIMIT_ADDR);
-  scalar_r_p2 = (uint32_t*) (SCALAR_R_P2_ADDR + proc_num*LIMIT_ADDR);
-  scalar_i_p1 = (uint32_t*) (SCALAR_I_P1_ADDR + proc_num*LIMIT_ADDR);
-  scalar_i_p2 = (uint32_t*) (SCALAR_I_P2_ADDR + proc_num*LIMIT_ADDR);
-  log_p1      = (uint32_t*) (LOG_P1_ADDR      + proc_num*LIMIT_ADDR);
-  log_p2      = (uint32_t*) (LOG_P2_ADDR      + proc_num*LIMIT_ADDR);
-  frac_p1     = (uint32_t*) (FRAC_P1_ADDR     + proc_num*LIMIT_ADDR);
-  frac_p2     = (uint32_t*) (FRAC_P2_ADDR     + proc_num*LIMIT_ADDR);
-  floor_p1    = (uint32_t*) (FLOOR_P1_ADDR    + proc_num*LIMIT_ADDR);
-  floor_p2    = (uint32_t*) (FLOOR_P2_ADDR    + proc_num*LIMIT_ADDR);
-  random_p1   = (uint32_t*) (RANDOM_P1_ADDR   + proc_num*LIMIT_ADDR);
-  random_p2   = (uint32_t*) (RANDOM_P2_ADDR   + proc_num*LIMIT_ADDR);
-  mult_r_p1   = (uint32_t*) (MULT_R_P1_ADDR   + proc_num*LIMIT_ADDR);
-  mult_r_p2   = (uint32_t*) (MULT_R_P2_ADDR   + proc_num*LIMIT_ADDR);
-  mult_i_p1   = (uint32_t*) (MULT_I_P1_ADDR   + proc_num*LIMIT_ADDR);
-  mult_i_p2   = (uint32_t*) (MULT_I_P2_ADDR   + proc_num*LIMIT_ADDR);
 #endif
 }
 
@@ -104,7 +71,7 @@ Real c_mod(Complex z) {
 #ifdef HARD
 	Real d;
 	LOAD_Z1(z, tid);
-	UNITE_DOUBLE(*mod_p1, *mod_p2, &(d));
+	UNITE_DOUBLE(*mod_p1[tid], *mod_p2[tid], &(d));
 	return d;
 #else
   return (z.r*z.r + z.i*z.i);
@@ -116,8 +83,8 @@ Complex c_add(Complex z1, Complex z2) {
   Complex z;
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	UNITE_DOUBLE(*add_r_p1, *add_r_p2, &(z.r));
-	UNITE_DOUBLE(*add_i_p1, *add_i_p2, &(z.i));
+	UNITE_DOUBLE(*add_r_p1[tid], *add_r_p2[tid], &(z.r));
+	UNITE_DOUBLE(*add_i_p1[tid], *add_i_p2[tid], &(z.i));
 	return z;
 #else
   Complex z;
@@ -129,11 +96,11 @@ Complex c_add(Complex z1, Complex z2) {
 
 Complex c_sub(Complex z1, Complex z2) {
 #ifdef HARD
-	Complex z;
+  Complex z;
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	UNITE_DOUBLE(*sub_r_p1, *sub_r_p2, &(z.r));
-	UNITE_DOUBLE(*sub_i_p1, *sub_i_p2, &(z.i));
+	UNITE_DOUBLE(*sub_r_p1[tid], *sub_r_p2[tid], &(z.r));
+	UNITE_DOUBLE(*sub_i_p1[tid], *sub_i_p2[tid], &(z.i));
 	return z;
 #else
   Complex z;
@@ -148,8 +115,8 @@ Complex c_scalar(Complex z1, Complex z2) {
 	Complex z;
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	UNITE_DOUBLE(*scalar_r_p1, *scalar_r_p2, &(z.r));
-	UNITE_DOUBLE(*scalar_i_p1, *scalar_i_p2, &(z.i));
+	UNITE_DOUBLE(*scal_r_p1[tid], *scal_r_p2[tid], &(z.r));
+	UNITE_DOUBLE(*scal_i_p1[tid], *scal_i_p2[tid], &(z.i));
 	return z;
 #else
   Complex z;
@@ -164,8 +131,8 @@ Complex c_mult(Complex z1, Complex z2) {
 	Complex z;
 	LOAD_Z1(z1, tid);
 	LOAD_Z2(z2, tid);
-	UNITE_DOUBLE(*mult_r_p1, *mult_r_p2, &(z.r));
-	UNITE_DOUBLE(*mult_i_p1, *mult_i_p2, &(z.i));
+	UNITE_DOUBLE(*mult_r_p1[tid], *mult_r_p2[tid], &(z.r));
+	UNITE_DOUBLE(*mult_i_p1[tid], *mult_i_p2[tid], &(z.i));
 	return z;
 #else
   Complex z;
@@ -178,8 +145,8 @@ Complex c_mult(Complex z1, Complex z2) {
 Complex c_uniform01() {
 #ifdef HARD
 	Complex z;
-	UNITE_DOUBLE(*random_p1, *random_p2, &(z.r));
-	UNITE_DOUBLE(*random_p1, *random_p2, &(z.i));
+	UNITE_DOUBLE(*random_p1[tid], *random_p2[tid], &(z.r));
+	UNITE_DOUBLE(*random_p1[tid], *random_p2[tid], &(z.i));
 	return z;
 #else
   Complex z;
@@ -195,11 +162,11 @@ Complex c_uniform01() {
 Real r_add(Real d1, Real d2) {
 #ifdef HARD
   Real d;
-  *z1_r_p1 = *DOUBLE_PART1(&d1);
-	*z1_r_p2 = *DOUBLE_PART2(&d1);
-  *z2_r_p1 = *DOUBLE_PART1(&d2);
-	*z2_r_p2 = *DOUBLE_PART2(&d2);
-  UNITE_DOUBLE(*add_r_p1, *add_r_p2, &(d));
+  *z1_r_p1[tid] = *DOUBLE_PART1(&d1);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d1);
+  *z2_r_p1[tid] = *DOUBLE_PART1(&d2);
+	*z2_r_p2[tid] = *DOUBLE_PART2(&d2);
+  UNITE_DOUBLE(*add_r_p1[tid], *add_r_p2[tid], &(d));
 	return d;
 #else
   return d1 + d2;
@@ -209,11 +176,11 @@ Real r_add(Real d1, Real d2) {
 Real r_sub(Real d1, Real d2) {
 #ifdef HARD
   Real d;
-  *z1_r_p1 = *DOUBLE_PART1(&d1);
-	*z1_r_p2 = *DOUBLE_PART2(&d1);
-  *z2_r_p1 = *DOUBLE_PART1(&d2);
-	*z2_r_p2 = *DOUBLE_PART2(&d2);
-  UNITE_DOUBLE(*sub_r_p1, *sub_r_p2, &(d));
+  *z1_r_p1[tid] = *DOUBLE_PART1(&d1);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d1);
+  *z2_r_p1[tid] = *DOUBLE_PART1(&d2);
+	*z2_r_p2[tid] = *DOUBLE_PART2(&d2);
+  UNITE_DOUBLE(*sub_r_p1[tid], *sub_r_p2[tid], &(d));
 	return d;
 #else
   return d1 - d2;
@@ -223,11 +190,11 @@ Real r_sub(Real d1, Real d2) {
 Real r_mult(Real d1, Real d2) {
 #ifdef HARD
   Real d;
-  *z1_r_p1 = *DOUBLE_PART1(&d1);
-	*z1_r_p2 = *DOUBLE_PART2(&d1);
-  *z2_r_p1 = *DOUBLE_PART1(&d2);
-	*z2_r_p2 = *DOUBLE_PART2(&d2);
-  UNITE_DOUBLE(*scalar_r_p1, *scalar_r_p2, &(d));
+  *z1_r_p1[tid] = *DOUBLE_PART1(&d1);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d1);
+  *z2_r_p1[tid] = *DOUBLE_PART1(&d2);
+	*z2_r_p2[tid] = *DOUBLE_PART2(&d2);
+  UNITE_DOUBLE(*scal_r_p1[tid], *scal_r_p2[tid], &(d));
 	return d;
 #else
   return d1 * d2;
@@ -236,9 +203,9 @@ Real r_mult(Real d1, Real d2) {
 
 Real r_log(Real d) {
 #ifdef HARD
-	*z1_r_p1 = *DOUBLE_PART1(&d);
-	*z1_r_p2 = *DOUBLE_PART2(&d);
-	UNITE_DOUBLE(*log_p1, *log_p2, &(d));
+	*z1_r_p1[tid] = *DOUBLE_PART1(&d);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d);
+	UNITE_DOUBLE(*log_p1[tid], *log_p2[tid], &(d));
 	return d;
 #else
   return log(d);
@@ -247,9 +214,9 @@ Real r_log(Real d) {
 
 Real r_frac(Real d) {
 #ifdef HARD
-	*z1_r_p1 = *DOUBLE_PART1(&d);
-	*z1_r_p2 = *DOUBLE_PART2(&d);
-	UNITE_DOUBLE(*frac_p1, *frac_p2, &(d));
+	*z1_r_p1[tid] = *DOUBLE_PART1(&d);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d);
+	UNITE_DOUBLE(*frac_p1[tid], *frac_p2[tid], &(d));
 	return d;
 #else
   return fmod(d, r_one);
@@ -258,9 +225,9 @@ Real r_frac(Real d) {
 
 int r_floor(Real d) {
 #ifdef HARD
-	*z1_r_p1 = *DOUBLE_PART1(&d);
-	*z1_r_p2 = *DOUBLE_PART2(&d);
-	UNITE_DOUBLE(*floor_p1, *floor_p2, &(d));
+	*z1_r_p1[tid] = *DOUBLE_PART1(&d);
+	*z1_r_p2[tid] = *DOUBLE_PART2(&d);
+	UNITE_DOUBLE(*floor_p1[tid], *floor_p2[tid], &(d));
 	return (int)d;
 #else
   return (int)floor(d);
