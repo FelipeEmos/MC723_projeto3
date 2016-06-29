@@ -18,7 +18,7 @@
 
 #ifdef HARD
 int tid;
-typedef (uint32_t*) u32;
+typedef uint32_t* u32;
 volatile u32 z1_r_p1[4]  ={(u32)(Z1_R_P1  ),(u32)(Z1_R_P1  +1*LIMIT),(u32)(Z1_R_P1  +2*LIMIT),(u32)(Z1_R_P1  +3*LIMIT)};
 volatile u32 z1_r_p2[4]  ={(u32)(Z1_R_P2  ),(u32)(Z1_R_P2  +1*LIMIT),(u32)(Z1_R_P2  +2*LIMIT),(u32)(Z1_R_P2  +3*LIMIT)};
 volatile u32 z1_i_p1[4]  ={(u32)(Z1_I_P1  ),(u32)(Z1_I_P1  +1*LIMIT),(u32)(Z1_I_P1  +2*LIMIT),(u32)(Z1_I_P1  +3*LIMIT)};
