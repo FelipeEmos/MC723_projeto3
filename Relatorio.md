@@ -102,6 +102,8 @@ Como o MIPS é um simulador 32 bits e a nossa aplicação requer a precisão gar
 
 Ao invés de instanciar 4 periféricos de ponto flutuante, um pra cada processador, implementamos somente um periférico que contém todos os endereços de cada processador, através de um vetor. Dessa forma, quando o processador quiser acessar um endereço do periférico, basta utilizar o seu identificador (número deste processador) e ter o endereço correspondente.
 
+![](./fpu.png)
+
 ## Periférico de lock
 
 Este periférico, do exercício 4, foi novamente utilizado a fim de garantir a consistência da aplicação quando existirem mais de um processador ativo. Como já explicamos no exercício 4 as suas funcionalidades, não faremos de novo.
