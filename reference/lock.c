@@ -8,17 +8,17 @@ void ReleaseGlobalLock() {
   *_lock = 0;
 }
 
-int getProc() {
-  AquireGlobalLock();
-  int procnum = _proccounter;
-  _proccounter++;
-  ReleaseGlobalLock();
-  return procnum;
-}
-
-int getTotalProcNumber() {
-  return _proccounter;
-}
+//int getProc() {
+//  AquireGlobalLock();
+//  int procnum = _proccounter;
+//  _proccounter++;
+//  ReleaseGlobalLock();
+//  return procnum;
+//}
+//
+//int getTotalProcNumber() {
+//  return _proccounter;
+//}
 
 int Join(int proc_num, int proc_total) {
   AquireGlobalLock();

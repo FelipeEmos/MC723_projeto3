@@ -41,7 +41,7 @@
 #include <systemc>
 // ArchC includes
 #include "ac_tlm_protocol.H"
-#include "../peripheral/fpuAddress.h"
+#include "../peripheral/fpu_addr.h"
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -88,7 +88,7 @@ public:
   ac_tlm_rsp_status writem( const uint32_t & , const uint32_t & );
   /// Internal read
   ac_tlm_rsp_status readm( const uint32_t & , uint32_t & );
-  
+
   void print_counters(int nproc);
   void send_int();
 

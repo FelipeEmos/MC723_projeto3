@@ -128,7 +128,7 @@ Color mandelbrot(Complex c) {
 // ---------------------------------------------------------------------------//
 // PRESETS
 
-void loadpreset(Complex *center, Complex *window, int preset) {
+void loadpreset(Complex *center, Complex *window, int *samples, int preset) {
   switch (preset) {
     case 1:
       // Mandelbrot Center
@@ -138,6 +138,7 @@ void loadpreset(Complex *center, Complex *window, int preset) {
       window->i = -4.2;
       scale     =  1.0;
       max_it    =  2000;
+      *samples  =  1;
       break;
     case 2:
       // Mandelbrot Feature 1
@@ -147,6 +148,7 @@ void loadpreset(Complex *center, Complex *window, int preset) {
       window->i = -0.000014628;
       scale     =  0.03;
       max_it    =  2000;
+      *samples  =  1;
       break;
     case 3:
       // Mandelbrot Feature 2
@@ -156,6 +158,7 @@ void loadpreset(Complex *center, Complex *window, int preset) {
       window->i = -0.000000000051299;
       scale     =  0.02;
       max_it    =  8000;
+      *samples  =  1;
       break;
   }
 }
@@ -166,23 +169,27 @@ void loadpreset(Complex *center, Complex *window, int preset) {
 int p_main(int argc, char *argv[]) {
   // -------------------------------------------------------------------------//
   // Reading Parameters
-  if (argc < 5) return Fail("Usage %s image_file number_of_samples preset number_of_procs\n", argv[0]);
+  if (argc != 3 || argc != 5)
+    return Fail("Usage %s image_file preset [proc number_of_procs]\n", argv[0]);
 
-  int proc_total = 1;
   char filename[32];
-  int samples = 1;
   int preset = 1;
+  int proc_num = 1;
+  int proc_total = 1;
 
   sscanf(argv[1], "%s", filename);
-  sscanf(argv[2], "%d", &samples);
-  sscanf(argv[3], "%d", &preset);
-  sscanf(argv[4], "%d", &proc_total);
+  sscanf(argv[2], "%d", &preset);
+  if (argc == 5) {
+    sscanf(argv[3], "%d", &proc_num);
+    sscanf(argv[4], "%d", &proc_total);
+  }
 
   // -------------------------------------------------------------------------//
   // Mandelbrot Setup
+  int samples;
   Complex center;
   Complex window;
-  loadpreset(&center, &window, preset);
+  loadpreset(&center, &window, &samples, preset);
   Complex window_base = c_sub(center, c_scalar(window, c_half));
   Complex window_limit = c_add(center, c_scalar(window, c_half));
   Complex offset = {r_one/(Real)WIDTH, r_one/(Real)HEIGHT};
@@ -191,10 +198,9 @@ int p_main(int argc, char *argv[]) {
   int start_job = 0;
   int end_job = HEIGHT;
 #ifdef __mips__
-  int proc_num = getProc();
+  //int proc_num = getProc();
   start_job = (proc_num*HEIGHT)/proc_total;
   end_job = ((proc_num+1)*HEIGHT)/proc_total;
-  setupFPU(proc_num);
 #endif
 
   // -------------------------------------------------------------------------//

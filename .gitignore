@@ -2,4 +2,7 @@
 *.o
 reference/mandel
 reference/mandel.mips
-reference/mandel_hard.mips
+reference/mandel_hard_1.mips
+reference/mandel_hard_2.mips
+reference/mandel_hard_3.mips
+reference/mandel_hard_4.mips
