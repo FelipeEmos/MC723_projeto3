@@ -276,7 +276,6 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  clog[procID]++;
-		  if (procID == 0) printf("HUE\n");
 		  break;
 	case LOG_P2:
 		  aux = log(z1[procID].r);

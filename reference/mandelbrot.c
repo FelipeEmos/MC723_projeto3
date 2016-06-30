@@ -196,19 +196,19 @@ int p_main(int argc, char *argv[]) {
   end_job = ((proc_num+1)*HEIGHT)/proc_total;
   setupFPU(proc_num);
   AquireGlobalLock();
-  printf("proc_num = %d proc_total = %d start_job = %d end_job = %d wid = %d hei = %d\n", proc_num, proc_total, start_job, end_job, WIDTH, HEIGHT);
+  //printf("proc_num = %d proc_total = %d start_job = %d end_job = %d wid = %d hei = %d\n", proc_num, proc_total, start_job, end_job, WIDTH, HEIGHT);
   ReleaseGlobalLock();
 #endif
 
 
+#ifdef __mips__
+      AquireGlobalLock();
+#endif
   // -------------------------------------------------------------------------//
   // For every pixel of the image
   for (int j = start_job; j < end_job; ++j) {
     //if (j % 100 == 0) { printf("%d ", j+100); fflush(stdout);}
     for (int i = 0; i < WIDTH; ++i) {
-#ifdef __mips__
-      AquireGlobalLock();
-#endif
       ColorAccumulator acc = {0};
       Complex base = {(Real)i,(Real)j};
       for (int s = 0; s < samples; ++s) {
@@ -219,28 +219,28 @@ int p_main(int argc, char *argv[]) {
       setPixel(i, j, average(&acc, samples));
 #ifdef __mips__
       //AquireGlobalLock();
-      printf("pixel %d %d done by proc %d\n", i, j, proc_num);
+      //printf("pixel %d %d done by proc %d\n", i, j, proc_num);
       //ReleaseGlobalLock();
-#endif
-
-#ifdef __mips__
-      ReleaseGlobalLock();
 #endif
     }
   }
+#ifdef __mips__
+      ReleaseGlobalLock();
+#endif
 
 
   // -------------------------------------------------------------------------//
   // Write Image to File
 #ifdef __mips__
-  if (Join(proc_num, proc_total)) return 0;
+  //if (Join(proc_num, proc_total)) return 0;
+  
 #endif
-  FILE *image;
-  image = fopen(argv[1], "wb");
-  if (image == NULL) return Fail("Could not open file %s\n", argv[1]);
-  fprintf(image, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
-  fwrite(_buffer, sizeof(BYTE), sizeof(_buffer), image);
-  fclose(image);
+//  FILE *image;
+//  image = fopen(argv[1], "wb");
+//  if (image == NULL) return Fail("Could not open file %s\n", argv[1]);
+//  fprintf(image, "P6\n%d %d\n255\n", WIDTH, HEIGHT);
+//  fwrite(_buffer, sizeof(BYTE), sizeof(_buffer), image);
+//  fclose(image);
 
   // -------------------------------------------------------------------------//
   // Open Image for Display

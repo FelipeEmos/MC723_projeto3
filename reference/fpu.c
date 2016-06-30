@@ -205,7 +205,6 @@ Real r_mult(Real d1, Real d2) {
 
 Real r_log(Real d) {
 #ifdef HARD
-	if (tid == 0) printf("JUE\n");
 	*z1_r_p1[tid] = *DOUBLE_PART1(&d);
 	*z1_r_p2[tid] = *DOUBLE_PART2(&d);
 	UNITE_DOUBLE(*log_p1[tid], *log_p2[tid], &(d));
