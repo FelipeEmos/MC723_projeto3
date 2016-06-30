@@ -1,7 +1,7 @@
 CFLAGS=-O2 -std=c99
 CC=gcc
 MIPSCC=mips-newlib-elf-gcc
-MIPSCFLAGS=-O2 -std=c99 -specs=archc
+MIPSCFLAGS= -O2 -std=c99 -specs=archc
 
 all: mandel mandel.mips mandel_hard.mips
 

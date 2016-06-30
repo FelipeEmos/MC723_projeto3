@@ -1,5 +1,7 @@
 #include "fpu.h"
 
+#include <stdio.h>
+
 #ifndef HARD
 #include <math.h>
 #include <stdlib.h>
@@ -17,7 +19,7 @@
 // Peripheral Pointers
 
 #ifdef HARD
-int tid;
+static int tid;
 typedef uint32_t* u32;
 volatile u32 z1_r_p1[4]  ={(u32)(Z1_R_P1  ),(u32)(Z1_R_P1  +1*LIMIT),(u32)(Z1_R_P1  +2*LIMIT),(u32)(Z1_R_P1  +3*LIMIT)};
 volatile u32 z1_r_p2[4]  ={(u32)(Z1_R_P2  ),(u32)(Z1_R_P2  +1*LIMIT),(u32)(Z1_R_P2  +2*LIMIT),(u32)(Z1_R_P2  +3*LIMIT)};
@@ -203,6 +205,7 @@ Real r_mult(Real d1, Real d2) {
 
 Real r_log(Real d) {
 #ifdef HARD
+	if (tid == 0) printf("JUE\n");
 	*z1_r_p1[tid] = *DOUBLE_PART1(&d);
 	*z1_r_p2[tid] = *DOUBLE_PART2(&d);
 	UNITE_DOUBLE(*log_p1[tid], *log_p2[tid], &(d));

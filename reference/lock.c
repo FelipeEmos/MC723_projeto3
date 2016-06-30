@@ -1,16 +1,19 @@
 #include "lock.h"
 
-void AquireGlobalLock() {
+#include <stdio.h>
+
+inline void AquireGlobalLock() {
   while(*_lock);
 }
 
-void ReleaseGlobalLock() {
+inline void ReleaseGlobalLock() {
   *_lock = 0;
 }
 
 int getProc() {
   AquireGlobalLock();
   int procnum = _proccounter;
+  printf("Processor %d started\n", procnum);
   _proccounter++;
   ReleaseGlobalLock();
   return procnum;
@@ -25,6 +28,7 @@ int Join(int proc_num, int proc_total) {
   _join_n++;
   ReleaseGlobalLock();
   if (proc_num == 0) {
+	printf("Process 0 waiting for others to join\n");
     while (_join_n < proc_total);
     return 0;
   }

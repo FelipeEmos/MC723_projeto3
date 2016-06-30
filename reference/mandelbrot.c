@@ -7,8 +7,8 @@
 
 #include <stdio.h>
 
-#define WIDTH   20
-#define HEIGHT  20
+#define WIDTH   40
+#define HEIGHT  40
 #define BYTE    unsigned char
 
 
@@ -195,13 +195,20 @@ int p_main(int argc, char *argv[]) {
   start_job = (proc_num*HEIGHT)/proc_total;
   end_job = ((proc_num+1)*HEIGHT)/proc_total;
   setupFPU(proc_num);
+  AquireGlobalLock();
+  printf("proc_num = %d proc_total = %d start_job = %d end_job = %d wid = %d hei = %d\n", proc_num, proc_total, start_job, end_job, WIDTH, HEIGHT);
+  ReleaseGlobalLock();
 #endif
+
 
   // -------------------------------------------------------------------------//
   // For every pixel of the image
   for (int j = start_job; j < end_job; ++j) {
     //if (j % 100 == 0) { printf("%d ", j+100); fflush(stdout);}
     for (int i = 0; i < WIDTH; ++i) {
+#ifdef __mips__
+      AquireGlobalLock();
+#endif
       ColorAccumulator acc = {0};
       Complex base = {(Real)i,(Real)j};
       for (int s = 0; s < samples; ++s) {
@@ -210,8 +217,18 @@ int p_main(int argc, char *argv[]) {
           accumulate(&acc, mandelbrot(c));
       }
       setPixel(i, j, average(&acc, samples));
+#ifdef __mips__
+      //AquireGlobalLock();
+      printf("pixel %d %d done by proc %d\n", i, j, proc_num);
+      //ReleaseGlobalLock();
+#endif
+
+#ifdef __mips__
+      ReleaseGlobalLock();
+#endif
     }
   }
+
 
   // -------------------------------------------------------------------------//
   // Write Image to File
