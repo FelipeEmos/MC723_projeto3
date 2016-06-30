@@ -70,7 +70,34 @@ Dessa forma definimos o conjunto de experimento variando entre com ou sem aceler
 
 ## Periféricos
 
-EXPLICAR COMO QUE FOI FEITO. 
+O periférico implementado é um periférico acelerador de contas com números complexos. O periférico aceita por vez dois números complexos, cada um com um double para a parte real e um double para a parte imaginária. Uma vez escritos os valores dos dois números, basta ler certos endereços específicos para recuperar os valores de contas feitas com esses números: soma, subtração, módulo, dentre outras operações indicadas na tabela a seguir:
+
+#### Endereços de escrita
+
+<center>
+
+|Addresses|Value|
+|:--:|:--:|
+|0x04</br>0x08|Re(Z1) part 1</br>Re(Z1) part 2|
+|0x0C</br>0x10|Im(Z1) part 1</br>Im(Z1) part 2|
+|0x14</br>0x18|Re(Z2) part 1</br>Re(Z2) part 2|
+|0x1C</br>0x20|Im(Z2) part 1</br>Im(Z2) part 2|
+
+</center>
+
+
+#### Endereços de leitura
+|Addresses|Value|Op|Uses Re(Z1)|Uses Im(Z1)|Uses Re(Z2)|Uses Im(Z2)
+|:--:|:--:|:--:|:--:|:--:|:--:|:--:|
+|0x24</br>0x28</br>0x2C</br>0x30| Re(Zr)</br>Re(Zr)</br>Im(Zr)</br>Im(Zr) | Zr = Z1 + Z2 | YES | YES | YES | YES |
+|0x34</br>0x38</br>0x3C</br>0x40| Re(Zr)</br>Re(Zr)</br>Im(Zr)</br>Im(Zr) | Zr = Z1 - Z2 | YES | YES | YES | YES |
+|0x44</br>0x48| R</br>R | R = \|Z1\| | YES | YES | NO | NO |
+|0x4C</br>0x50</br>0x54</br>0x58| Re(Zr)</br>Re(Zr)</br>Im(Zr)</br>Im(Zr) | Zr = dot( Z1, Z2 )</br>or</br> Zr = Re(Z1)\*Re(Z2) + j\*Im(Z1)\*Im(Z2) | YES | YES | YES | YES |
+|0x5C</br>0x60| R</br>R | R = ln( Re(Z1) ) | YES | NO | NO | NO |
+|0x64</br>0x68| R</br>R | R= frac( Re(Z1) ) | YES | NO | NO | NO |
+|0x6C</br>0x70| R</br>R | R= floor( Re(Z1) ) | YES | NO | NO | NO |
+|0x74</br>0x78| R</br>R | R= random[0,1] | NO | NO | NO | NO |
+|0x7C</br>0x80</br>0x84</br>0x88| Re(Zr)</br>Re(Zr)</br>Im(Zr)</br>Im(Zr) | Zr = Z1 * Z2 | YES | YES | YES | YES |
 
 ## Instanciação de processadores e periféricos
 
