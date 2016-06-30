@@ -32,7 +32,7 @@ void mips::behavior() {
 
   bhv_pc = ac_pc;
   if( bhv_pc >= dec_cache_size){
-    cerr << "ArchC: Address out of bounds (pc=0x" << hex << bhv_pc << ")." << endl;
+    cerr << this->name() << " ArchC: Address out of bounds (pc=0x" << hex << bhv_pc << ")." << endl;
     stop();
     return;
   }
@@ -70,9 +70,9 @@ void mips::behavior() {
       }
       instr_vec = ins_cache->instr_p;
       ins_id = instr_vec->get(IDENT);
-
+      
       if( ins_id == 0 ) {
-        cerr << "ArchC Error: Unidentified instruction. " << endl;
+        cerr << this->name() << " ArchC Error: Unidentified instruction. " << endl;
         cerr << "PC = " << hex << decode_pc << dec << endl;
         stop();
         return;

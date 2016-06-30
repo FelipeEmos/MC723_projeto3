@@ -46,7 +46,7 @@
 #define DEBUG_MODEL
 
 // ********* UNCOMMENT if you want debug information *********/
-#define DEBUG2
+//#define DEBUG2
 
 //////////////////////////////////////////////////////////////////////////////
 
@@ -276,7 +276,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 		  *((uint32_t *) &d) = bswap_32(aux_int);
 
 		  clog[procID]++;
-
+		  if (procID == 0) printf("HUE\n");
 		  break;
 	case LOG_P2:
 		  aux = log(z1[procID].r);
@@ -378,7 +378,7 @@ ac_tlm_rsp_status ac_tlm_fpu::readm( const uint32_t &a , uint32_t &d )
 }
 
 void ac_tlm_fpu::print_counters(int nproc) {
-	for(int i =0 ; i < nproc ; i++) {
+	for(int i = 0 ; i < nproc ; i++) {
 		cout << "Proc " << i << ": number of c_scalar instructions: " << cscalar[i] << endl;
 		cout << "Proc " << i << ": number of d_log instructions: " << clog[i] << endl;
 		cout << "Proc " << i << ": number of c_mult instructions: " << cmult[i] << endl;

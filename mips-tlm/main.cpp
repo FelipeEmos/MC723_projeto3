@@ -61,7 +61,7 @@ int sc_main(int ac, char *av[])
   
   
   //!  ISA simulator
-  mips mips_proc1("mips");
+  mips mips_proc1("mips1");
 
   mips *mips_proc2, *mips_proc3, *mips_proc4;
   if(nproc > 1){
@@ -108,29 +108,29 @@ int sc_main(int ac, char *av[])
   sprintf(strPreset, "%d", preset);
 
 
-  char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-  char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  //char *av1[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  //char *av2[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  //char *av3[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
+  //char *av4[] = {"mips.x", "--load=mandel.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
 
-/*
+
   char *av1[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av2[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av3[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
   char *av4[] = {"mips.x", "--load=mandel_hard.mips", outputFileName, strNumberOfSamples, strPreset, strNProc};
-*/
+
   
-  mips_proc1.init(ac1, av1);
   mips_proc1.set_instr_batch_size(1);
+  mips_proc1.init(ac1, av1);
   if(nproc > 1){
-     mips_proc2->init(ac1, av2);
-     mips_proc2->set_instr_batch_size(1);
+	mips_proc2->set_instr_batch_size(1);
+    mips_proc2->init(ac1, av2);
   }
   if(nproc > 2){
+	mips_proc3->set_instr_batch_size(1);
     mips_proc3->init(ac1, av3);
-    mips_proc3->set_instr_batch_size(1);
-    mips_proc4->init(ac1, av4);
     mips_proc4->set_instr_batch_size(1);
+    mips_proc4->init(ac1, av4);
   }
   
   cerr << endl;
