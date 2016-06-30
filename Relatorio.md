@@ -21,6 +21,7 @@ A aplicação escolhida foi o algoritmo de Mandelbrot, que consiste em gerar o c
 
 A seguir segue o pseudo-código utilzado em nosso projeto.
 
+```c
 	For each pixel (Px, Py) on the screen, do:
 	{
   		x0 = scaled x coordinate of pixel (scaled to lie in the Mandelbrot X scale)
@@ -53,7 +54,7 @@ A seguir segue o pseudo-código utilzado em nosso projeto.
   		color = linear_interpolate(color1, color2, iteration % 1)
   		plot(Px, Py, color)
 	}
-
+```
 Percebe-se que todas operações estão dentro de um laço, que coresponde à uma matriz, dessa forma, paralelizar o algoritmo significa escolher um intervalo para cada processador calcular os pontos. 
 
 Para cada pixel, existe uma série de cálculos para definir a sua cor na figura final. Como em muitos casos o tamanho da janela é pequeno, estes número acabam sendo definidos como double. 
