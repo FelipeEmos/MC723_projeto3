@@ -68,11 +68,29 @@ Dessa forma definimos o conjunto de experimento variando entre com ou sem aceler
 
 ## Mandelbrot
 
-## Periféricos
+## Periféricos (FPU)
 
-O periférico implementado é um periférico acelerador de contas com números complexos. O periférico aceita por vez dois números complexos, cada um com um double para a parte real e um double para a parte imaginária. Uma vez escritos os valores dos dois números, basta ler certos endereços específicos para recuperar os valores de contas feitas com esses números: soma, subtração, módulo, dentre outras operações indicadas na tabela a seguir:
+O periférico implementado é um periférico acelerador de contas com números complexos. O periférico aceita por vez dois números complexos, cada um com um double para a parte real e um double para a parte imaginária. Uma vez escritos os valores dos dois números, basta ler certos endereços específicos para recuperar os valores de contas feitas com esses números: soma, subtração, módulo, dentre outras operações indicadas na tabela de datasheet do periférico (neste mesmo relatório). A seguir, uma figura explicativa de uma operação feita usando o periférico:
 
-#### Endereços de escrita
+![Image of FPU Functioning](contents/Function%20FPU.png)
+
+Note que o archc por padrão tem arquitetura 32 bits, portanto as instruções de leitura e escrita de palavras conseguem manipular apenas 32 bits de cada vez. Como as operações do periférico são de variáveis *double* (que tem 64 bits), é necessário que toda variável de leitura e de escrita seja quebrada em duas partes de 32 bits e, somente assim, seja lida ou escrita com duas instruções (uma para cada parte de 32 bits). 
+
+Se o código com a variável *double* que se deseja passar ou receber do periférico roda em um processador *big endian*, você pode obter o endereço da primeira e segunda parte do double com os seguintes macros:
+
+``` c
+// 64bit breaking into 32bit
+// x -> double value to be broken
+#define DOUBLE_PART1(addr_double) \
+	((uint32_t*)(addr_double))
+
+// x -> double value to be broken
+#define DOUBLE_PART2(addr_double) \
+	(((uint32_t*)(addr_double))+1)
+```
+
+#### Datasheet
+##### Endereços de escrita
 
 <center>
 
@@ -86,7 +104,7 @@ O periférico implementado é um periférico acelerador de contas com números c
 </center>
 
 
-#### Endereços de leitura
+##### Endereços de leitura
 |Addresses|Value|Op|Uses Re(Z1)|Uses Im(Z1)|Uses Re(Z2)|Uses Im(Z2)
 |:--:|:--:|:--:|:--:|:--:|:--:|:--:|
 |0x24</br>0x28</br>0x2C</br>0x30| Re(Zr)</br>Re(Zr)</br>Im(Zr)</br>Im(Zr) | Zr = Z1 + Z2 | YES | YES | YES | YES |
